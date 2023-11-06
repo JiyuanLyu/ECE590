@@ -37,3 +37,13 @@ def matrix_mul(a,b):
         c.append(row)
 
     return c
+
+a=[[1,2,3],
+   [4,5,6],
+   [7,8,9],
+   [4,0,7]]
+b=[[1,2],
+   [3,4],
+   [5,6]]
+c = matrix_mul(a, b)
+print(c)

@@ -23,7 +23,7 @@
 #    (6, 4, 2), (11, 4, 2)}
 #  Note that the length 4 range of 'b's does not appear as there are no
 #  Length 4 runs of 'a's.
-
+import random
 def matching_length_sub_strs(s, c1, c2):
     # WRITE ME
     
