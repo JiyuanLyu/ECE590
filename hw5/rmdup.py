@@ -25,11 +25,6 @@ def rmdup(data):
     last_occur.reverse()
     return last_occur
 
-# test the function
-#data = [1,2,3,2,1,4,2]
-#result = rmdup(data)
-#print(result)
-
 # write a function to generte different data size
 def getSize(size):
     sizeArr = []
@@ -79,14 +74,14 @@ def getTime(sizeArr):
 
 def main():
     sizeArr = getSize(4096)
-    timeArr1 = getTime(sizeArr)
-    timeArr2 = getTime(sizeArr)
-    timeArr3 = getTime(sizeArr)
-    timeArr = []
+    timeArr = getTime(sizeArr)
+    #timeArr2 = getTime(sizeArr)
+    #timeArr3 = getTime(sizeArr)
+    #timeArr = []
     
-    for i in range(3):
-        for j in range(len(sizeArr)):
-            timeArr[i][j] = (timeArr1[i][j] + timeArr2[i][j] + timeArr3[i][j]) / 3
+    #for i in range(3):
+    #    for j in range(len(sizeArr)):
+    #        timeArr[i][j] = (timeArr1[i][j] + timeArr2[i][j] + timeArr3[i][j]) / 3
     
     # print the runtime
     for i in range(len(sizeArr)):
