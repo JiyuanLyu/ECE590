@@ -74,14 +74,14 @@ def getTime(sizeArr):
 
 def main():
     sizeArr = getSize(4096)
-    timeArr = getTime(sizeArr)
-    #timeArr2 = getTime(sizeArr)
-    #timeArr3 = getTime(sizeArr)
-    #timeArr = []
+    timeArr1 = getTime(sizeArr)
+    timeArr2 = getTime(sizeArr)
+    timeArr3 = getTime(sizeArr)
+    timeArr = []
     
-    #for i in range(3):
-    #    for j in range(len(sizeArr)):
-    #        timeArr[i][j] = (timeArr1[i][j] + timeArr2[i][j] + timeArr3[i][j]) / 3
+    for i in range(3):
+        for j in range(len(sizeArr)):
+            timeArr[i][j] = (timeArr1[i][j] + timeArr2[i][j] + timeArr3[i][j]) / 3
     
     # print the runtime
     for i in range(len(sizeArr)):
@@ -99,8 +99,7 @@ def main():
     plt.xlabel('Data Size')
     plt.ylabel('Runtime')
     plt.title('Remove Duplicates Runtime')
-    plt.legend()  
-    plt.grid(True)  
+    plt.legend()
 
     plt.savefig('q1.png')
     return 0
