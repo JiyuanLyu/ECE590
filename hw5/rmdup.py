@@ -54,11 +54,11 @@ def getTime(sizeArr):
     timeRare = []
     for i in range(len(sizeArr)):
         dataMany = getData(sizeArr[i])[0]
-        timeMany.append(rmdup(dataMany))
+        timeMany.append(rmdup(dataMany).time())
         dataModerate = getData(sizeArr[i])[1]
-        timeModerate.append(rmdup(dataModerate))
+        timeModerate.append(rmdup(dataModerate).time())
         dataRare = getData(sizeArr[i])[2]
-        timeRare.append(rmdup(dataRare))
+        timeRare.append(rmdup(dataRare).time())
 
     return [timeMany, timeModerate, timeRare]
 
