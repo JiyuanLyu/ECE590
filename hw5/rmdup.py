@@ -79,10 +79,13 @@ def main():
     timeArr3 = getTime(sizeArr)
     timeArr = []
     
+    # calculate the average runtime
     for i in range(3):
+        tmp = []
         for j in range(len(sizeArr)):
-            timeArr[i][j] = (timeArr1[i][j] + timeArr2[i][j] + timeArr3[i][j]) / 3
-    
+            tmp[j] = (timeArr1[i][j] + timeArr2[i][j] + timeArr3[i][j]) / 3
+        timeArr.append(tmp)
+        
     # print the runtime
     for i in range(len(sizeArr)):
         print(sizeArr[i], ",",

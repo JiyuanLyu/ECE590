@@ -17,6 +17,7 @@
 #   [49, 64],
 #   [76, 100],
 #   [39, 50]]
+
 def matrix_mul(a,b):
     # Write me
 
@@ -47,3 +48,29 @@ b=[[1,2],
    [5,6]]
 c = matrix_mul(a, b)
 print(c)
+
+# write a function to get an array of N
+def getN(x, y):
+    tmp = x
+    ans = [tmp]
+    
+    while tmp < y:
+        tmp *= 2
+        ans.append(tmp)
+    
+    return ans
+    
+# get Matrix
+def getMatrix(row, column):
+    ans = []
+    for i in range(row):
+        
+    return 0
+    
+
+def main():
+    arrN = getN(4, 512)
+    return 0
+
+if __name__ == "__main__":
+    main()
