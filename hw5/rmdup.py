@@ -30,7 +30,7 @@ def rmdup(data):
 # write a function to generte different data size
 def getSize(size):
     sizeArr = []
-    for i in range(10):
+    for i in range(11):
         sizeArr.append(size)
         size = size * 2
     return sizeArr
@@ -74,7 +74,6 @@ def getTime(sizeArr):
 def main():
     sizeArr = getSize(4096)
     timeArr = getTime(sizeArr)
-    print(timeArr)
     for i in range(len(sizeArr)):
         print(sizeArr[i], ",",
               timeArr[0][i], ",",
