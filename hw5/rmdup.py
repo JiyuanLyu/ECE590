@@ -6,17 +6,20 @@
 # Import necessary package
 import time
 import random
+import matplotlib.pyplot as plt
 
 # write the function removes duplicates
 def rmdup(data):
     # Write me
+    unique = {}
     last_occur = []
 
     # reverse the data array
-    for element in reversed(data):
+    for element in reversed(data):#range(len(data)-1, -1, -1):#reversed(data):
         # if this element not record yet, record
-        if element not in last_occur:
+        if element not in unique:
             last_occur.append(element)
+            unique[element] = "True"
 
     # return the reverse of the recording array
     last_occur.reverse()
@@ -47,7 +50,7 @@ def getData(size):
         dataRare.append(random.randrange(0, size/4))
     return [dataMany, dataModerate, dataRare]
 
-# write a function to generate data
+# write a function to get time
 def getTime(sizeArr):
     timeMany = []
     timeModerate = []
@@ -57,28 +60,49 @@ def getTime(sizeArr):
         dataModerate = getData(sizeArr[i])[1]
         dataRare = getData(sizeArr[i])[2]
 
-        timeBefore = time.time()
+        timeBeforeM = time.time()
         rmdup(dataMany)
-        timeMany.append(time.time() - timeBefore)
+        timeAfterM = time.time()
+        timeMany.append(timeAfterM - timeBeforeM)
 
-        timeBefore = time.time()
+        timeBeforeMd = time.time()
         rmdup(dataModerate)
-        timeModerate.append(time.time() - timeBefore)
+        timeAfterMd = time.time()
+        timeModerate.append(timeAfterMd - timeBeforeMd)
 
-        timeBefore = time.time()
+        timeBeforeR = time.time()
         rmdup(dataRare)
-        timeRare.append(time.time() - timeBefore)
+        timeAfterR = time.time()
+        timeRare.append(timeAfterR - timeBeforeR)
 
     return [timeMany, timeModerate, timeRare]
 
 def main():
     sizeArr = getSize(4096)
-    timeArr = getTime(sizeArr)
+    timeArr1 = getTime(sizeArr)
+    timeArr2 = getTime(sizeArr)
+    timeArr3 = getTime(sizeArr)
+    timeArr = (timeArr1 + timeArr2 + timeArr3)/3
+    # print the runtime
     for i in range(len(sizeArr)):
         print(sizeArr[i], ",",
               timeArr[0][i], ",",
               timeArr[1][i], ",",
               timeArr[2][i], "\n")
+        
+    # Save plot
+    plt.figure(figsize=(8, 6))
+
+    plt.plot(sizeArr, timeArr[0], label='Many Duplicates', color='blue')
+    plt.plot(sizeArr, timeArr[1], label='Moderate Duplication', color='green')
+    plt.plot(sizeArr, timeArr[2], label='Rare Duplication', color='red')
+    plt.xlabel('Data Size')
+    plt.ylabel('Runtime')
+    plt.title('Remove Duplicates Runtime')
+    plt.legend()  
+    plt.grid(True)  
+
+    plt.savefig('q1.png')
     return 0
 
 
