@@ -42,17 +42,7 @@ def matrix_mul(a,b):
         # append this row to the c matrix
         c.append(row)
 
-    return c
-
-a=[[1,2,3],
-   [4,5,6],
-   [7,8,9],
-   [4,0,7]]
-b=[[1,2],
-   [3,4],
-   [5,6]]
-c = matrix_mul(a, b)
-print(c)
+    return c 
 
 # write a function to get an array of N
 def getN(x, y):
@@ -60,7 +50,7 @@ def getN(x, y):
     ans = [tmp]
     
     while tmp < y:
-        tmp *= 2
+        tmp = tmp * 2
         ans.append(tmp)
     
     return ans
@@ -68,13 +58,14 @@ def getN(x, y):
 # get Matrix
 def getMatrix(row, column):
     ans = []
-    for i in range(row):
+    for i in range(int(row)):
         temp = []
-        for j in range(column):
+        for j in range(int(column)):
             temp.append(random.randrange(0, 1000))
         ans.append(temp)
     return ans
 
+# get the runtime array
 def getTime(arrN):
     ans = []
     for i in range(len(arrN)):
@@ -106,6 +97,7 @@ def getTime(arrN):
 
 def main():
     arrN = getN(4, 512)
+    print(arrN)
     time1 = getTime(arrN)
     time2 = getTime(arrN)
     time3 = getTime(arrN)
