@@ -83,7 +83,7 @@ def main():
     for i in range(3):
         tmp = []
         for j in range(len(sizeArr)):
-            tmp[j] = (timeArr1[i][j] + timeArr2[i][j] + timeArr3[i][j]) / 3
+            tmp.append((timeArr1[i][j] + timeArr2[i][j] + timeArr3[i][j]) / 3)
         timeArr.append(tmp)
         
     # print the runtime
