@@ -19,7 +19,7 @@ def rmdup(data):
         # if this element not record yet, record
         if element not in unique:
             last_occur.append(element)
-            unique[element] = "True"
+            unique[element] = True
 
     # return the reverse of the recording array
     last_occur.reverse()
@@ -82,7 +82,12 @@ def main():
     timeArr1 = getTime(sizeArr)
     timeArr2 = getTime(sizeArr)
     timeArr3 = getTime(sizeArr)
-    timeArr = (timeArr1 + timeArr2 + timeArr3)/3
+    timeArr = []
+    
+    for i in range(3):
+        for j in range(len(sizeArr)):
+            timeArr[i][j] = (timeArr1[i][j] + timeArr2[i][j] + timeArr3[i][j]) / 3
+    
     # print the runtime
     for i in range(len(sizeArr)):
         print(sizeArr[i], ",",
