@@ -18,6 +18,11 @@
 #   [76, 100],
 #   [39, 50]]
 
+import random
+import time
+import matplotlib.pyplot as plt
+
+
 def matrix_mul(a,b):
     # Write me
 
@@ -64,12 +69,74 @@ def getN(x, y):
 def getMatrix(row, column):
     ans = []
     for i in range(row):
+        temp = []
+        for j in range(column):
+            temp.append(random.randrange(0, 1000))
+        ans.append(temp)
+    return ans
+
+def getTime(arrN):
+    ans = []
+    for i in range(len(arrN)):
+        tmp = []
+        # Many rows by few columns
+        a_R = getMatrix(arrN[i]*4, arrN[i])
+        b_R = getMatrix(arrN[i], arrN[i]/4)
+        timeBeforeR = time.time()
+        matrix_mul(a_R, b_R)
+        tmp.append(time.time() - timeBeforeR)
         
-    return 0
-    
+        # Square
+        a_S = getMatrix(arrN[i], arrN[i])
+        b_S = getMatrix(arrN[i], arrN[i])
+        timeBeforeS = time.time()
+        matrix_mul(a_S, b_S)
+        tmp.append(time.time() - timeBeforeS)
+        
+        # Many rows by few columns
+        a_C = getMatrix(arrN[i]/4, arrN[i])
+        b_C = getMatrix(arrN[i], arrN[i]*4)
+        timeBeforeC = time.time()
+        matrix_mul(a_C, b_C)
+        tmp.append(time.time() - timeBeforeC)
+        
+        ans.append(tmp)
+        
+    return ans
 
 def main():
     arrN = getN(4, 512)
+    time1 = getTime(arrN)
+    time2 = getTime(arrN)
+    time3 = getTime(arrN)
+    time = []
+    
+    # calculate the average runtime
+    for i in range(3):
+        tmp = []
+        for j in range(len(arrN)):
+            tmp.append((time1[i][j] + time2[i][j] + time3[i][j]) / 3)
+        time.append(tmp)
+        
+    # print the runtime
+    for i in range(len(arrN)):
+        print(arrN[i], ",",
+              time[0][i], ",",
+              time[1][i], ",",
+              time[2][i], "\n")
+        
+    # save plot
+    plt.figure(figsize=(8, 6))
+
+    plt.plot(arrN, time[0], label='Many Rows by Few Columns', color='blue')
+    plt.plot(arrN, time[1], label='Sqaure', color='green')
+    plt.plot(arrN, time[2], label='Few Rows by Many Columns', color='red')
+    plt.xlabel('N')
+    plt.ylabel('Runtime')
+    plt.title('Matrix Multiplication Runtime')
+    plt.legend()
+
+    plt.savefig('q2.png')
     return 0
 
 if __name__ == "__main__":
