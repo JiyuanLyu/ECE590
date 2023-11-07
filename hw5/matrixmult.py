@@ -67,33 +67,32 @@ def getMatrix(row, column):
 
 # get the runtime array
 def getTime(arrN):
-    ans = []
+    timeR = []
+    timeS = []
+    timeC = []
     for i in range(len(arrN)):
-        tmp = []
         # Many rows by few columns
         a_R = getMatrix(arrN[i]*4, arrN[i])
         b_R = getMatrix(arrN[i], arrN[i]/4)
         timeBeforeR = time.time()
         matrix_mul(a_R, b_R)
-        tmp.append(time.time() - timeBeforeR)
+        timeR.append(time.time() - timeBeforeR)
         
         # Square
         a_S = getMatrix(arrN[i], arrN[i])
         b_S = getMatrix(arrN[i], arrN[i])
         timeBeforeS = time.time()
         matrix_mul(a_S, b_S)
-        tmp.append(time.time() - timeBeforeS)
+        timeS.append(time.time() - timeBeforeS)
         
         # Many rows by few columns
         a_C = getMatrix(arrN[i]/4, arrN[i])
         b_C = getMatrix(arrN[i], arrN[i]*4)
         timeBeforeC = time.time()
         matrix_mul(a_C, b_C)
-        tmp.append(time.time() - timeBeforeC)
+        timeC.append(time.time() - timeBeforeC)
         
-        ans.append(tmp)
-        
-    return ans
+    return [timeR, timeS, timeC]
 
 def main():
     arrN = getN(4, 512)
