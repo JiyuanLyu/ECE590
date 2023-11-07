@@ -27,12 +27,12 @@ def rmdup(data):
 #result = rmdup(data)
 #print(result)
 
-# write a function to generate different data size
+# write a function to generte different data size
 def getSize(size):
     sizeArr = []
-    while size < 4194304:
+    for i in range(10):
         sizeArr.append(size)
-        size *= 2
+        size = size * 2
     return sizeArr
 
 # write a function to get data
@@ -54,23 +54,32 @@ def getTime(sizeArr):
     timeRare = []
     for i in range(len(sizeArr)):
         dataMany = getData(sizeArr[i])[0]
-        timeMany.append(rmdup(dataMany).time())
         dataModerate = getData(sizeArr[i])[1]
-        timeModerate.append(rmdup(dataModerate).time())
         dataRare = getData(sizeArr[i])[2]
-        timeRare.append(rmdup(dataRare).time())
+
+        timeBefore = time.time()
+        rmdup(dataMany)
+        timeMany.append(time.time() - timeBefore)
+
+        timeBefore = time.time()
+        rmdup(dataModerate)
+        timeModerate.append(time.time() - timeBefore)
+
+        timeBefore = time.time()
+        rmdup(dataRare)
+        timeRare.append(time.time() - timeBefore)
 
     return [timeMany, timeModerate, timeRare]
 
 def main():
     sizeArr = getSize(4096)
     timeArr = getTime(sizeArr)
+    print(timeArr)
     for i in range(len(sizeArr)):
-        for j in range(len(timeArr)):
-            print(sizeArr[i], ",",
-                  timeArr[0][j], ",",
-                  timeArr[1][j], ",",
-                  timeArr[2][j], "\n")
+        print(sizeArr[i], ",",
+              timeArr[0][i], ",",
+              timeArr[1][i], ",",
+              timeArr[2][i], "\n")
     return 0
 
 
