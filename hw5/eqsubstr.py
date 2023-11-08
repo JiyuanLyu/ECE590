@@ -191,30 +191,25 @@ def main():
     plt.savefig('q3.png')
     
     #import packages
-    import pandas as pd
 
-    fig, ax =plt.subplots(1,1)
-    data=[[1,2,3],
-        [9,1,8],
-        [6,5,4]]
-    column_labels=["Col 1", "Col 2", "Col 3"]
+    fig, ax =plt.subplots(1, 1)
 
-    #creating a 2-dimensional dataframe out of the given data
-    df=pd.DataFrame(data,columns=column_labels)
-
-    ax.axis('tight') #turns off the axis lines and labels
-    ax.axis('off') #changes x and y axis limits such that all data is shown
+    table = pd.DataFrame()
+    table['Best Case'] = time[0]
+    table['Worst Case'] = time[1]
+    table['Random Input'] = time[2]
+    
+    ax.axis('tight')
+    ax.axis('off')
 
     #plotting data
-    table = ax.table(cellText=df.values,
-            colLabels=df.columns,
-            rowLabels=["Row 1","Row 2","Row 3"],
-            rowColours =["yellow"] * 3,
-            colColours =["red"] * 3,
+    table = ax.table(cellText = table.values,
+            colLabels = table.columns,
+            rowLabels = sizeArr,
             loc="center")
     table.set_fontsize(14)
     table.scale(1,2)
-    plt.show()
+    plt.savefig('q3_table.png')
     
     return 0
 
