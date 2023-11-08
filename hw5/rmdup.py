@@ -7,6 +7,7 @@
 import time
 import random
 import matplotlib.pyplot as plt
+import pandas as pd
 
 # write the function removes duplicates
 def rmdup(data):
@@ -78,6 +79,7 @@ def main():
     timeArr2 = getTime(sizeArr)
     timeArr3 = getTime(sizeArr)
     timeArr = []
+    rowname = []
     
     # calculate the average runtime
     for i in range(3):
@@ -88,6 +90,7 @@ def main():
         
     # print the runtime
     for i in range(len(sizeArr)):
+        rowname.append(str(sizeArr[i]))
         print(sizeArr[i], ",",
               timeArr[0][i], ",",
               timeArr[1][i], ",",
@@ -105,6 +108,26 @@ def main():
     plt.legend()
 
     plt.savefig('q1.png')
+    
+    fig, ax =plt.subplots(1, 1)
+
+    table = pd.DataFrame()
+    table['Many Duplicates'] = timeArr[0]
+    table['Moderate Duplication'] = timeArr[1]
+    table['Rare Duplication'] = timeArr[2]
+    table.index = rowname # type: ignore
+        
+    ax.axis('tight')
+    ax.axis('off')
+
+    #plotting data
+    table = ax.table(cellText = table.values,
+            colLabels = table.columns,
+            rowLabels = sizeArr,
+            loc="center")
+    table.set_fontsize(14)
+    table.scale(1,2)
+    plt.savefig('q1_table.png')
     return 0
 
 

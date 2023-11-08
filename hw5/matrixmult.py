@@ -21,6 +21,7 @@
 import random
 import time
 import matplotlib.pyplot as plt
+import pandas as pd
 
 
 def matrix_mul(a,b):
@@ -101,6 +102,7 @@ def main():
     time2 = getTime(arrN)
     time3 = getTime(arrN)
     time = []
+    rowname = []
     
     # calculate the average runtime
     for i in range(3):
@@ -111,6 +113,7 @@ def main():
         
     # print the runtime
     for i in range(len(arrN)):
+        rowname.append(str(arrN[i]))
         print(arrN[i], ",",
               time[0][i], ",",
               time[1][i], ",",
@@ -128,6 +131,28 @@ def main():
     plt.legend()
 
     plt.savefig('q2.png')
+    
+    #import packages
+
+    fig, ax =plt.subplots(1, 1)
+
+    table = pd.DataFrame()
+    table['Many Rows by Few Columns'] = time[0]
+    table['Sqaure'] = time[1]
+    table['Few Rows by Many Columns'] = time[2]
+    table.index = rowname # type: ignore
+        
+    ax.axis('tight')
+    ax.axis('off')
+
+    #plotting data
+    table = ax.table(cellText = table.values,
+            colLabels = table.columns,
+            rowLabels = arrN,
+            loc="center")
+    table.set_fontsize(14)
+    table.scale(1,2)
+    plt.savefig('q2_table.png')
     return 0
 
 if __name__ == "__main__":
