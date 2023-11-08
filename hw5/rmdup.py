@@ -16,7 +16,7 @@ def rmdup(data):
     last_occur = []
 
     # reverse the data array
-    for element in reversed(data):#range(len(data)-1, -1, -1):#reversed(data):
+    for element in reversed(data):
         # if this element not record yet, record
         if element not in unique:
             last_occur.append(element)
