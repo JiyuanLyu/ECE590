@@ -23,37 +23,54 @@
 #    (6, 4, 2), (11, 4, 2)}
 #  Note that the length 4 range of 'b's does not appear as there are no
 #  Length 4 runs of 'a's.
+import time
 import random
+import matplotlib.pyplot as plt
+import pandas as pd
 def matching_length_sub_strs(s, c1, c2):
     # WRITE ME
     
-    a_conti = {}
-    b_conti = {}
+    c1_dict = {}
+    c2_dict = {}
     ans = set()
+    
     # first find the index and the contiguous ranges of c1 and c2
+    count1 = 0
+    count2 = 0
     for i in range(len(s)):
         if s[i] == c1:
-            index = i
-            count = 1
-            for j in range(i+1,len(s)):
-                if s[j] == c1:
-                    count += 1
-            a_conti[count] = index
+            count1 = count1 + 1
+        if s[i] != c1 or i == len(s)-1:
+            index1 = i - count1
+            if i == len(s)-1:
+                index1 = i - count1 + 1
+            if count1 != 0:
+                if count1 in c1_dict:
+                    c1_dict[count1].append(index1)
+                else:
+                    c1_dict[count1] = [index1]
+                count1 = 0
+                
         if s[i] == c2:
-            index = i
-            count = 1
-            for j in range(i+1,len(s)):
-                if s[j] == c2:
-                    count += 1
-            b_conti[count] = index
+            count2 = count2 + 1
+        if s[i] != c2 or i == len(s)-1:
+            index2 = i - count2
+            if i == len(s)-1:
+                index2 = i - count2 + 1
+            if count2 != 0:
+                if count2 in c2_dict:
+                    c2_dict[count2].append(index2)
+                else:
+                    c2_dict[count2] = [index2]
+                count2 = 0
+                
     
-    for a_key in range(a_conti.keys()):
-        for b_key in range(b_conti.keys()):
-            if a_key == b_key:
-                for a in a_conti[a_key]:
-                    for b in b_conti[a_key]:
-                        ans_row = [a, b, a_key]
-                        ans.append(ans_row)
+    for key in c1_dict:
+        if key in c2_dict:
+            for c1_value in c1_dict[key]:
+                for c2_value in c2_dict[key]:
+                    tuple = (c1_value, c2_value, int(key))
+                    ans.add(tuple)
 
     return ans
 
@@ -74,8 +91,132 @@ def rndstr(n):
     return "".join(ans)
 
     
-s = "abcabbaacabaabbbb"
-c1 = "a"
-c2 = "b"
-ans = matching_length_sub_strs(s, c1, c2)
-print(ans)
+# s = "abcabbaacabaabbbb"
+# c1 = "a"
+# c2 = "b"
+# ans = matching_length_sub_strs(s, c1, c2)
+# print(ans)
+
+# s = "aaabbcabbbaa"
+# c1 = "a"
+# c2 = "b"
+# ans = matching_length_sub_strs(s, c1, c2)
+# print(ans)
+
+def getSize(n):
+    size = [n]
+    while n < 16384:
+        n = n*2
+        size.append(n)
+    return size
+
+# write a function to generate the best case
+def getBest(n):
+    ans = ""
+    for i in range(n):
+        ans += "a"
+    return ans
+
+# write a function to generate the best case
+def getWorst(n):
+    ans = ""
+    for i in range(int(n/2)):
+        ans += "ab"
+    return ans
+
+def getString(sizeArr):
+    best = []
+    worst = []
+    randomS = []
+    for i in range(len(sizeArr)):
+        best.append(getBest(sizeArr[i]))
+        worst.append(getWorst(sizeArr[i]))
+        randomS.append(rndstr(sizeArr[i]))
+    return [best, worst, randomS]
+
+def getTime(strings):
+    timeBest = []
+    timeWorst =[]
+    timeRandom = []
+    
+    for i in range(len(strings[0])):
+        timeBeforeBest = time.time()
+        matching_length_sub_strs(strings[0][i], "a", "b")
+        timeBest.append(time.time() - timeBeforeBest)
+        
+        timeBeforeWorst = time.time()
+        matching_length_sub_strs(strings[1][i], "a", "b")
+        timeWorst.append(time.time() - timeBeforeWorst)
+        
+        timeBeforeRandom = time.time()
+        matching_length_sub_strs(strings[2][i], "a", "b")
+        timeRandom.append(time.time() - timeBeforeRandom)
+    
+    return [timeBest, timeWorst, timeRandom]
+
+def main():
+    sizeArr = getSize(512)
+    strings1 = getString(sizeArr)
+    time1 = getTime(strings1)
+    strings2 = getString(sizeArr)
+    time2 = getTime(strings2)
+    strings3 = getString(sizeArr)
+    time3 = getTime(strings3)
+    time = []
+    
+    # calculate the average runtime
+    for i in range(3):
+        tmp = []
+        for j in range(len(sizeArr)):
+            tmp.append((time1[i][j] + time2[i][j] + time3[i][j]) / 3)
+        time.append(tmp)
+
+    for i in range(len(sizeArr)):
+        print(sizeArr[i], ",",
+              time[0][i], ",",
+              time[1][i], ",",
+              time[2][i], "\n")
+    
+    # Save plot
+    plt.figure(figsize=(8, 6))
+
+    plt.plot(sizeArr, time[0], label='Best Case', color='blue')
+    plt.plot(sizeArr, time[1], label='Worst Case', color='green')
+    plt.plot(sizeArr, time[2], label='Random Input', color='red')
+    plt.xlabel('Input Size')
+    plt.ylabel('Runtime')
+    plt.title('Matching Length Substrings')
+    plt.legend()
+
+    plt.savefig('q3.png')
+    
+    #import packages
+    import pandas as pd
+
+    fig, ax =plt.subplots(1,1)
+    data=[[1,2,3],
+        [9,1,8],
+        [6,5,4]]
+    column_labels=["Col 1", "Col 2", "Col 3"]
+
+    #creating a 2-dimensional dataframe out of the given data
+    df=pd.DataFrame(data,columns=column_labels)
+
+    ax.axis('tight') #turns off the axis lines and labels
+    ax.axis('off') #changes x and y axis limits such that all data is shown
+
+    #plotting data
+    table = ax.table(cellText=df.values,
+            colLabels=df.columns,
+            rowLabels=["Row 1","Row 2","Row 3"],
+            rowColours =["yellow"] * 3,
+            colColours =["red"] * 3,
+            loc="center")
+    table.set_fontsize(14)
+    table.scale(1,2)
+    plt.show()
+    
+    return 0
+
+if __name__ == "__main__":
+    main()
