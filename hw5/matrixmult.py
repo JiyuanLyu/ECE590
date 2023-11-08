@@ -118,41 +118,40 @@ def main():
               time[0][i], ",",
               time[1][i], ",",
               time[2][i], "\n")
-        
-    # save plot
-    plt.figure(figsize=(8, 6))
-
-    plt.plot(arrN, time[0], label='Many Rows by Few Columns', color='blue')
-    plt.plot(arrN, time[1], label='Sqaure', color='green')
-    plt.plot(arrN, time[2], label='Few Rows by Many Columns', color='red')
-    plt.xlabel('N')
-    plt.ylabel('Runtime')
-    plt.title('Matrix Multiplication Runtime')
-    plt.legend()
-
-    plt.savefig('q2.png')
     
-    #import packages
+    # The following part are comment for submitting
+    # # save plot
+    # plt.figure(figsize=(8, 6))
 
-    fig, ax =plt.subplots(1, 1)
+    # plt.plot(arrN, time[0], label='Many Rows by Few Columns', color='blue')
+    # plt.plot(arrN, time[1], label='Sqaure', color='green')
+    # plt.plot(arrN, time[2], label='Few Rows by Many Columns', color='red')
+    # plt.xlabel('N')
+    # plt.ylabel('Runtime')
+    # plt.title('Matrix Multiplication Runtime')
+    # plt.legend()
 
-    table = pd.DataFrame()
-    table['Many Rows by Few Columns'] = time[0]
-    table['Sqaure'] = time[1]
-    table['Few Rows by Many Columns'] = time[2]
-    table.index = rowname # type: ignore
+    # plt.savefig('q2.png')
+
+    # fig, ax =plt.subplots(1, 1)
+
+    # table = pd.DataFrame()
+    # table['Many Rows by Few Columns'] = time[0]
+    # table['Sqaure'] = time[1]
+    # table['Few Rows by Many Columns'] = time[2]
+    # table.index = rowname # type: ignore
         
-    ax.axis('tight')
-    ax.axis('off')
+    # ax.axis('tight')
+    # ax.axis('off')
 
-    #plotting data
-    table = ax.table(cellText = table.values,
-            colLabels = table.columns,
-            rowLabels = arrN,
-            loc="center")
-    table.set_fontsize(14)
-    table.scale(1,2)
-    plt.savefig('q2_table.png')
+    # #plotting data
+    # table = ax.table(cellText = table.values,
+    #         colLabels = table.columns,
+    #         rowLabels = arrN,
+    #         loc="center")
+    # table.set_fontsize(14)
+    # table.scale(1,2)
+    # plt.savefig('q2_table.png')
     return 0
 
 if __name__ == "__main__":
