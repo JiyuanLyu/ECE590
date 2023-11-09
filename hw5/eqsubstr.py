@@ -64,8 +64,7 @@ def matching_length_sub_strs(s, c1, c2):
                 else:
                     c2_dict[count2] = [index2]
                 count2 = 0
-                
-    
+
     for key in c1_dict:
         if key in c2_dict:
             for c1_value in c1_dict[key]:
@@ -102,28 +101,19 @@ def getSize(n):
 # write a function to generate the best case
 def getBest(n):
     ans = ""
-    for i in range(n):
-        ans += "a"
-    return ans
-
-# write a function to generate the best case
-def getAB(n):
-    choices = ['a', 'b']
-    pattern_choice = random.choice([1, 2])  # 1 represents (a*b*), 2 represents (b*a*)
-
-    length = n   # Ensure that the sum of a_count and b_count does not exceed n
-    
+    pattern_choice = random.choice([1, 2])  
+    length = n
     if pattern_choice == 1:
         a_count = random.randint(0, length)
         b_count = length - a_count
         sequence = ['a'] * a_count + ['b'] * b_count
-        result = ''.join(sequence)    
+        ans = ''.join(sequence)    
     else:
         b_count = random.randint(0, length)
         a_count = length - b_count
         sequence = ['b'] * b_count + ['a'] * a_count
-        result = ''.join(sequence)
-    return result
+        ans = ''.join(sequence)
+    return ans
 
 # write a function to generate the best case
 def getWorst(n):
@@ -134,19 +124,16 @@ def getWorst(n):
 
 def getString(sizeArr):
     best = []
-    AB = []
     worst = []
     randomS = []
     for i in range(len(sizeArr)):
         best.append(getBest(sizeArr[i]))
-        AB.append(getAB(sizeArr[i]))
         worst.append(getWorst(sizeArr[i]))
         randomS.append(rndstr(sizeArr[i]))
-    return [best, AB, worst, randomS]
+    return [best, worst, randomS]
 
 def getTime(strings):
     timeBest = []
-    timeAB = []
     timeWorst =[]
     timeRandom = []
     
@@ -155,19 +142,15 @@ def getTime(strings):
         matching_length_sub_strs(strings[0][i], "a", "b")
         timeBest.append(time.time() - timeBeforeBest)
         
-        timeBeforeAB = time.time()
-        matching_length_sub_strs(strings[1][i], "a", "b")
-        timeAB.append(time.time() - timeBeforeAB)
-        
         timeBeforeWorst = time.time()
-        matching_length_sub_strs(strings[2][i], "a", "b")
+        matching_length_sub_strs(strings[1][i], "a", "b")
         timeWorst.append(time.time() - timeBeforeWorst)
         
         timeBeforeRandom = time.time()
-        matching_length_sub_strs(strings[3][i], "a", "b")
+        matching_length_sub_strs(strings[2][i], "a", "b")
         timeRandom.append(time.time() - timeBeforeRandom)
     
-    return [timeBest, timeAB, timeWorst, timeRandom]
+    return [timeBest, timeWorst, timeRandom]
 
 def main():
     sizeArr = getSize(512)
@@ -181,7 +164,7 @@ def main():
     rowname = []
     
     # calculate the average runtime
-    for i in range(4):
+    for i in range(3):
         tmp = []
         for j in range(len(sizeArr)):
             tmp.append((time1[i][j] + time2[i][j] + time3[i][j]) / 3)
@@ -192,8 +175,7 @@ def main():
         print(sizeArr[i], ",",
               time[0][i], ",",
               time[1][i], ",",
-              time[2][i], ",",
-              time[3][i], "\n")
+              time[2][i], "\n")
     
     # The following part are comment for submitting
     
@@ -201,9 +183,8 @@ def main():
     plt.figure(figsize=(8, 6))
 
     plt.plot(sizeArr, time[0], label='Best Case', color='blue')
-    plt.plot(sizeArr, time[1], label='AB', color='orange')
-    plt.plot(sizeArr, time[2], label='Worst Case', color='green')
-    plt.plot(sizeArr, time[3], label='Random Input', color='red')
+    plt.plot(sizeArr, time[1], label='Worst Case', color='green')
+    plt.plot(sizeArr, time[2], label='Random Input', color='red')
     plt.xlabel('Input Size')
     plt.ylabel('Runtime')
     plt.title('Matching Length Substrings')
@@ -217,11 +198,9 @@ def main():
 
     table = pd.DataFrame()
     table['Best Case'] = time[0]
-    table['AB'] = time[0]
-    table['Worst Case'] = time[2]
-    table['Random Input'] = time[3]
+    table['Worst Case'] = time[1]
+    table['Random Input'] = time[2]
     table.index = rowname # type: ignore
-        
     ax.axis('tight')
     ax.axis('off')
 
