@@ -91,18 +91,6 @@ def rndstr(n):
     ans=[rndchr() for i in range(n)]
     return "".join(ans)
 
-    
-# s = "abcabbaacabaabbbb"
-# c1 = "a"
-# c2 = "b"
-# ans = matching_length_sub_strs(s, c1, c2)
-# print(ans)
-
-# s = "aaabbcabbbaa"
-# c1 = "a"
-# c2 = "b"
-# ans = matching_length_sub_strs(s, c1, c2)
-# print(ans)
 
 def getSize(n):
     size = [n]
@@ -182,40 +170,40 @@ def main():
     
     # The following part are comment for submitting
     
-    # Save plot
-    # plt.figure(figsize=(8, 6))
+    #Save plot
+    plt.figure(figsize=(8, 6))
 
-    # plt.plot(sizeArr, time[0], label='Best Case', color='blue')
-    # plt.plot(sizeArr, time[1], label='Worst Case', color='green')
-    # plt.plot(sizeArr, time[2], label='Random Input', color='red')
-    # plt.xlabel('Input Size')
-    # plt.ylabel('Runtime')
-    # plt.title('Matching Length Substrings')
-    # plt.legend()
+    plt.plot(sizeArr, time[0], label='Best Case', color='blue')
+    plt.plot(sizeArr, time[1], label='Worst Case', color='green')
+    plt.plot(sizeArr, time[2], label='Random Input', color='red')
+    plt.xlabel('Input Size')
+    plt.ylabel('Runtime')
+    plt.title('Matching Length Substrings')
+    plt.legend()
 
-    # plt.savefig('q3.png')
+    plt.savefig('q3.png')
     
-    # #import packages
+    #import packages
 
-    # fig, ax =plt.subplots(1, 1)
+    fig, ax =plt.subplots(1, 1)
 
-    # table = pd.DataFrame()
-    # table['Best Case'] = time[0]
-    # table['Worst Case'] = time[1]
-    # table['Random Input'] = time[2]
-    # table.index = rowname # type: ignore
+    table = pd.DataFrame()
+    table['Best Case'] = time[0]
+    table['Worst Case'] = time[1]
+    table['Random Input'] = time[2]
+    table.index = rowname # type: ignore
         
-    # ax.axis('tight')
-    # ax.axis('off')
+    ax.axis('tight')
+    ax.axis('off')
 
-    # #plotting data
-    # table = ax.table(cellText = table.values,
-    #         colLabels = table.columns,
-    #         rowLabels = sizeArr,
-    #         loc="center")
-    # table.set_fontsize(14)
-    # table.scale(1,2)
-    # plt.savefig('q3_table.png')
+    #plotting data
+    table = ax.table(cellText = table.values,
+            colLabels = table.columns,
+            rowLabels = sizeArr,
+            loc="center")
+    table.set_fontsize(14)
+    table.scale(1,2)
+    plt.savefig('q3_table.png')
     
     return 0
 
