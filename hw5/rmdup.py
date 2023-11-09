@@ -98,37 +98,37 @@ def main():
         
     # The following part are comment for submitting
     # # Save plot
-    # plt.figure(figsize=(8, 6))
+    plt.figure(figsize=(8, 6))
 
-    # plt.plot(sizeArr, timeArr[0], label='Many Duplicates', color='blue')
-    # plt.plot(sizeArr, timeArr[1], label='Moderate Duplication', color='green')
-    # plt.plot(sizeArr, timeArr[2], label='Rare Duplication', color='red')
-    # plt.xlabel('Data Size')
-    # plt.ylabel('Runtime')
-    # plt.title('Remove Duplicates Runtime')
-    # plt.legend()
+    plt.plot(sizeArr, timeArr[0], label='Many Duplicates', color='blue')
+    plt.plot(sizeArr, timeArr[1], label='Moderate Duplication', color='green')
+    plt.plot(sizeArr, timeArr[2], label='Rare Duplication', color='red')
+    plt.xlabel('Data Size')
+    plt.ylabel('Runtime (second)')
+    plt.title('Remove Duplicates Runtime')
+    plt.legend()
 
-    # plt.savefig('q1.png')
+    plt.savefig('q1.png')
     
-    # fig, ax =plt.subplots(1, 1)
+    fig, ax =plt.subplots(1, 1)
 
-    # table = pd.DataFrame()
-    # table['Many Duplicates'] = timeArr[0]
-    # table['Moderate Duplication'] = timeArr[1]
-    # table['Rare Duplication'] = timeArr[2]
-    # table.index = rowname # type: ignore
+    table = pd.DataFrame()
+    table['Many Duplicates (s)'] = timeArr[0]
+    table['Moderate Duplication (s)'] = timeArr[1]
+    table['Rare Duplication (s)'] = timeArr[2]
+    table.index = rowname # type: ignore
         
-    # ax.axis('tight')
-    # ax.axis('off')
+    ax.axis('tight')
+    ax.axis('off')
 
-    # #plotting data
-    # table = ax.table(cellText = table.values,
-    #         colLabels = table.columns,
-    #         rowLabels = sizeArr,
-    #         loc="center")
-    # table.set_fontsize(14)
-    # table.scale(1,2)
-    # plt.savefig('q1_table.png')
+    #plotting data
+    table = ax.table(cellText = table.values,
+            colLabels = table.columns,
+            rowLabels = sizeArr,
+            loc="center")
+    table.set_fontsize(14)
+    table.scale(1,2)
+    plt.savefig('q1_table.png')
     return 0
 
 
