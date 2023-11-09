@@ -26,7 +26,6 @@
 import time
 import random
 import matplotlib.pyplot as plt
-from numpy import size
 import pandas as pd
 def matching_length_sub_strs(s, c1, c2):
     # WRITE ME
@@ -186,7 +185,7 @@ def main():
     plt.plot(sizeArr, time[1], label='Worst Case', color='green')
     plt.plot(sizeArr, time[2], label='Random Input', color='red')
     plt.xlabel('Input Size')
-    plt.ylabel('Runtime')
+    plt.ylabel('Runtime (second)')
     plt.title('Matching Length Substrings')
     plt.legend()
 
@@ -197,9 +196,9 @@ def main():
     fig, ax =plt.subplots(1, 1)
 
     table = pd.DataFrame()
-    table['Best Case'] = time[0]
-    table['Worst Case'] = time[1]
-    table['Random Input'] = time[2]
+    table['Best Case(s)'] = time[0]
+    table['Worst Case(s)'] = time[1]
+    table['Random Input(s)'] = time[2]
     table.index = rowname # type: ignore
     ax.axis('tight')
     ax.axis('off')
