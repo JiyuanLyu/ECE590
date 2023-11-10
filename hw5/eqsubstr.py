@@ -178,40 +178,39 @@ def main():
               time[2][i], "\n")
     
     # The following part are comment for submitting
-    
     # Save plot
-    # plt.figure(figsize=(8, 6))
+    plt.figure(figsize=(8, 6))
 
-    # plt.plot(sizeArr, time[0], label='Best Case', color='blue')
-    # plt.plot(sizeArr, time[1], label='Worst Case', color='green')
-    # plt.plot(sizeArr, time[2], label='Random Input', color='red')
-    # plt.xlabel('Input Size')
-    # plt.ylabel('Runtime (second)')
-    # plt.title('Matching Length Substrings')
-    # plt.legend()
+    plt.plot(sizeArr, time[0], label='Best Case', color='blue')
+    plt.plot(sizeArr, time[1], label='Worst Case', color='green')
+    plt.plot(sizeArr, time[2], label='Random Input', color='red')
+    plt.xlabel('Input Size')
+    plt.ylabel('Runtime (second)')
+    plt.title('Matching Length Substrings')
+    plt.legend()
 
-    # plt.savefig('q3.png')
-    
-    # #import packages
+    plt.savefig('q3.png')
 
-    # fig, ax =plt.subplots(1, 1)
+    #import packages
 
-    # table = pd.DataFrame()
-    # table['Best Case(s)'] = time[0]
-    # table['Worst Case(s)'] = time[1]
-    # table['Random Input(s)'] = time[2]
-    # table.index = rowname # type: ignore
-    # ax.axis('tight')
-    # ax.axis('off')
+    fig, ax =plt.subplots(1, 1)
 
-    # #plotting data
-    # table = ax.table(cellText = table.values,
-    #         colLabels = table.columns,
-    #         rowLabels = sizeArr,
-    #         loc="center")
-    # table.set_fontsize(14)
-    # table.scale(1,2)
-    # plt.savefig('q3_table.png')
+    table = pd.DataFrame()
+    table['Best Case(s)'] = time[0]
+    table['Worst Case(s)'] = time[1]
+    table['Random Input(s)'] = time[2]
+    table.index = rowname # type: ignore
+    ax.axis('tight')
+    ax.axis('off')
+
+    #plotting data
+    table = ax.table(cellText = table.values,
+            colLabels = table.columns,
+            rowLabels = sizeArr,
+            loc="center")
+    table.set_fontsize(14)
+    table.scale(1,2)
+    plt.savefig('q3_table.png')
     
     return 0
 
