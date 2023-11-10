@@ -89,7 +89,7 @@ def rndstr(n):
     ans=[rndchr() for i in range(n)]
     return "".join(ans)
 
-
+# write a function 
 def getSize(n):
     size = [n]
     while n < 16384:
@@ -98,15 +98,16 @@ def getSize(n):
     return size
 
 # write a function to generate the best case
+# the best case should only have (a*b*) U (b*a*)
 def getBest(n):
-    ans = ""
+    ans = ''
     pattern_choice = random.choice([1, 2])  
     length = n
     if pattern_choice == 1:
         a_count = random.randint(0, length)
         b_count = length - a_count
         sequence = ['a'] * a_count + ['b'] * b_count
-        ans = ''.join(sequence)    
+        ans = "".join(sequence)    
     else:
         b_count = random.randint(0, length)
         a_count = length - b_count
@@ -179,38 +180,38 @@ def main():
     # The following part are comment for submitting
     
     # Save plot
-    plt.figure(figsize=(8, 6))
+    # plt.figure(figsize=(8, 6))
 
-    plt.plot(sizeArr, time[0], label='Best Case', color='blue')
-    plt.plot(sizeArr, time[1], label='Worst Case', color='green')
-    plt.plot(sizeArr, time[2], label='Random Input', color='red')
-    plt.xlabel('Input Size')
-    plt.ylabel('Runtime (second)')
-    plt.title('Matching Length Substrings')
-    plt.legend()
+    # plt.plot(sizeArr, time[0], label='Best Case', color='blue')
+    # plt.plot(sizeArr, time[1], label='Worst Case', color='green')
+    # plt.plot(sizeArr, time[2], label='Random Input', color='red')
+    # plt.xlabel('Input Size')
+    # plt.ylabel('Runtime (second)')
+    # plt.title('Matching Length Substrings')
+    # plt.legend()
 
-    plt.savefig('q3.png')
+    # plt.savefig('q3.png')
     
-    #import packages
+    # #import packages
 
-    fig, ax =plt.subplots(1, 1)
+    # fig, ax =plt.subplots(1, 1)
 
-    table = pd.DataFrame()
-    table['Best Case(s)'] = time[0]
-    table['Worst Case(s)'] = time[1]
-    table['Random Input(s)'] = time[2]
-    table.index = rowname # type: ignore
-    ax.axis('tight')
-    ax.axis('off')
+    # table = pd.DataFrame()
+    # table['Best Case(s)'] = time[0]
+    # table['Worst Case(s)'] = time[1]
+    # table['Random Input(s)'] = time[2]
+    # table.index = rowname # type: ignore
+    # ax.axis('tight')
+    # ax.axis('off')
 
-    #plotting data
-    table = ax.table(cellText = table.values,
-            colLabels = table.columns,
-            rowLabels = sizeArr,
-            loc="center")
-    table.set_fontsize(14)
-    table.scale(1,2)
-    plt.savefig('q3_table.png')
+    # #plotting data
+    # table = ax.table(cellText = table.values,
+    #         colLabels = table.columns,
+    #         rowLabels = sizeArr,
+    #         loc="center")
+    # table.set_fontsize(14)
+    # table.scale(1,2)
+    # plt.savefig('q3_table.png')
     
     return 0
 
