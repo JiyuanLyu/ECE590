@@ -96,14 +96,18 @@ def findMaxCoin(A, path, coin, currR, currC):
             nextC = currC + 1
     return path, coin, nextR, nextC
 
-# A = [[0, 4, 1, 3, 11],
-#      [8, 2, 4, 5, 6],
-#      [1, 7, 3, 9, 0],
-#      [0, 12, 1, 2, 0]]
+A = [[0, 4, 1, 3, 11],
+     [8, 2, 4, 5, 6],
+     [1, 7, 3, 9, 0],
+     [0, 12, 1, 2, 0]]
 
-# path, coin = findPath(A)
-# print(path)
-# print(coin)
+
+timeB = time.perf_counter_ns()
+path, coin = findPath(A)
+timeA = time.perf_counter_ns() - timeB
+print(path)
+print(coin)
+print(timeA)
 
 
 # write a function to get an array of size N
@@ -135,21 +139,21 @@ def getTime(arrN):
     for i in range(len(arrN)):
         # Many rows by few columns
         a_R = getMatrix(arrN[i]*4, arrN[i])
-        timeBeforeR = time.time()
+        timeBeforeR = time.perf_counter_ns()
         findPath(a_R)
-        timeR.append(time.time() - timeBeforeR)
+        timeR.append(time.perf_counter_ns() - timeBeforeR)
         
         # Square
         a_S = getMatrix(arrN[i], arrN[i])
-        timeBeforeS = time.time()
+        timeBeforeS = time.perf_counter_ns()
         findPath(a_S)
-        timeS.append(time.time() - timeBeforeS)
+        timeS.append(time.perf_counter_ns() - timeBeforeS)
         
         # Many rows by few columns
         a_C = getMatrix(arrN[i]/4, arrN[i])
-        timeBeforeC = time.time()
+        timeBeforeC = time.perf_counter_ns()
         findPath(a_C)
-        timeC.append(time.time() - timeBeforeC)
+        timeC.append(time.perf_counter_ns() - timeBeforeC)
         
     return [timeR, timeS, timeC]
 
@@ -182,7 +186,7 @@ def getExpResult():
     plt.plot(arrN, time[1], label='Sqaure', color='green')
     plt.plot(arrN, time[2], label='Few Rows by Many Columns', color='red')
     plt.xlabel('N')
-    plt.ylabel('Runtime (seconds)')
+    plt.ylabel('Runtime (nanoseconds)')
     plt.title('Vault.py Runtime')
     plt.legend()
 
@@ -212,9 +216,12 @@ def getExpResult():
 def main():
     # filename = sys.argv[1]
     # matrix = readVault(filename)
+    # timeB = time.perf_counter_ns()
     # path, coin= findPath(matrix)
+    # timeA = time.perf_counter_ns() - timeB
     # print(path)
     # print(coin)
+    # print(timeA)
     getExpResult()
     
 
