@@ -1,7 +1,15 @@
+import sys
 import time
 
-def readVault():
-    return 0
+def readVault(filename):
+    matrix = []
+
+    with open(filename, 'r') as file:
+        for line in file:
+            row = [int(num) for num in line.strip().split(',')]
+            matrix.append(row)
+
+    return matrix
 
 def findPath(A):
     path = ""
@@ -85,16 +93,22 @@ def findMaxCoin(A, path, coin, currR, currC):
             nextC = currC + 1
     return path, coin, nextR, nextC
 
-A = [[0, 4, 1, 3, 11],
-     [8, 2, 4, 5, 6],
-     [1, 7, 3, 9, 0],
-     [0, 12, 1, 2, 0]]
+# A = [[0, 4, 1, 3, 11],
+#      [8, 2, 4, 5, 6],
+#      [1, 7, 3, 9, 0],
+#      [0, 12, 1, 2, 0]]
 
-path, coin = findPath(A)
-print(path)
-print(coin)
+# path, coin = findPath(A)
+# print(path)
+# print(coin)
 
 if __name__ == "__main__":
     if len(sys.argv) != 2:
-        print("Usage: python vault.py <filename>")
+        print("Input arguments number is wrong!")
         sys.exit(1)
+
+    filename = sys.argv[1]
+    matrix = readVault(filename)
+    path, coin= findPath(matrix)
+    print(path)
+    print(coin)
