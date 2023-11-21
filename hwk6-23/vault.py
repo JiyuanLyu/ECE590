@@ -1,5 +1,8 @@
 import sys
 import time
+import random
+import matplotlib.pyplot as plt
+import pandas as pd
 
 def readVault(filename):
     matrix = []
@@ -102,13 +105,121 @@ def findMaxCoin(A, path, coin, currR, currC):
 # print(path)
 # print(coin)
 
+
+# write a function to get an array of size N
+def getN(x, y):
+    tmp = x
+    ans = [tmp]
+    
+    while tmp < y:
+        tmp = tmp * 2
+        ans.append(tmp)
+    
+    return ans
+
+# get Matrix
+def getMatrix(row, column):
+    ans = []
+    for i in range(int(row)):
+        temp = []
+        for j in range(int(column)):
+            temp.append(random.randrange(0, 1000))
+        ans.append(temp)
+    return ans
+
+# get the runtime array
+def getTime(arrN):
+    timeR = []
+    timeS = []
+    timeC = []
+    for i in range(len(arrN)):
+        # Many rows by few columns
+        a_R = getMatrix(arrN[i]*4, arrN[i])
+        timeBeforeR = time.time()
+        findPath(a_R)
+        timeR.append(time.time() - timeBeforeR)
+        
+        # Square
+        a_S = getMatrix(arrN[i], arrN[i])
+        timeBeforeS = time.time()
+        findPath(a_S)
+        timeS.append(time.time() - timeBeforeS)
+        
+        # Many rows by few columns
+        a_C = getMatrix(arrN[i]/4, arrN[i])
+        timeBeforeC = time.time()
+        findPath(a_C)
+        timeC.append(time.time() - timeBeforeC)
+        
+    return [timeR, timeS, timeC]
+
+def getExpResult():
+    arrN = getN(4, 512)
+    time1 = getTime(arrN)
+    time2 = getTime(arrN)
+    time3 = getTime(arrN)
+    time = []
+    rowname = []
+# calculate the average runtime
+    for i in range(3):
+        tmp = []
+        for j in range(len(arrN)):
+            tmp.append((time1[i][j] + time2[i][j] + time3[i][j]) / 3)
+        time.append(tmp)
+        
+    # print the runtime
+    for i in range(len(arrN)):
+        rowname.append(str(arrN[i]))
+        print(arrN[i], ",",
+              time[0][i], ",",
+              time[1][i], ",",
+              time[2][i], "\n")
+    
+    # save plot
+    plt.figure(figsize=(8, 6))
+
+    plt.plot(arrN, time[0], label='Many Rows by Few Columns', color='blue')
+    plt.plot(arrN, time[1], label='Sqaure', color='green')
+    plt.plot(arrN, time[2], label='Few Rows by Many Columns', color='red')
+    plt.xlabel('N')
+    plt.ylabel('Runtime (seconds)')
+    plt.title('Vault.py Runtime')
+    plt.legend()
+
+    plt.savefig('q2.png')
+
+    fig, ax =plt.subplots(1, 1)
+
+    table = pd.DataFrame()
+    table['Many Rows by Few Columns (s)'] = time[0]
+    table['Sqaure (s)'] = time[1]
+    table['Few Rows by Many Columns (s)'] = time[2]
+    table.index = rowname # type: ignore
+        
+    ax.axis('tight')
+    ax.axis('off')
+
+    #plotting data
+    table = ax.table(cellText = table.values,
+            colLabels = table.columns,
+            rowLabels = arrN,
+            loc="center")
+    table.set_fontsize(14)
+    table.scale(1,2)
+    plt.savefig('q1_table.png')
+    return 0
+
+def main():
+    # filename = sys.argv[1]
+    # matrix = readVault(filename)
+    # path, coin= findPath(matrix)
+    # print(path)
+    # print(coin)
+    getExpResult()
+    
+
 if __name__ == "__main__":
     if len(sys.argv) != 2:
         print("Input arguments number is wrong!")
         sys.exit(1)
-
-    filename = sys.argv[1]
-    matrix = readVault(filename)
-    path, coin= findPath(matrix)
-    print(path)
-    print(coin)
+    main()
