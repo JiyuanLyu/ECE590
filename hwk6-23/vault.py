@@ -1,114 +1,87 @@
 import sys
+from tempfile import tempdir
 import time
 import random
 import matplotlib.pyplot as plt
 import pandas as pd
 from functools import cache
 
+sys.setrecursionlimit(50000)
+
 def readVault(filename):
-    matrix = []
-
-    with open(filename, 'r') as file:
-        for line in file:
-            row = [int(num) for num in line.strip().split(',')]
-            matrix.append(row)
-
+    file = open(filename, 'r').readlines()
+    matrix = [list(map(int, line.strip().split(','))) for line in file]
+    matrix = tuple(tuple(row) for row in matrix)
     return matrix
 
-def findPath(A):
-    path = ""
-    coin  = 0
+@cache
+def findPathWCache(A, x, y, path):
     nrow = len(A)
     ncol = len(A[0])
     
-    coin = coin + A[0][0]
-    currR = 0
-    currC = 0
-    while currR <= nrow-1 and currC <= ncol-1:
-        if currR == nrow-1 and currC == ncol-1:
-            coin = coin + A[nrow-1][ncol-1]
-            break
-        path, coin, currR, currC = findMaxCoin(A, path, coin, currR, currC)
-    return path[::-1], coin
-
-
-# this function find the max coin path from the end to the start
-def findMaxCoin(A, path, coin, currR, currC):
-    nn = 0
-    nw = 0
-    ww = 0
-    wn = 0
-    
-    nrow = len(A)
-    ncol = len(A[0])
-            
-    # check if it can go back to south (the dragon go north)
-    n = 0
-    if currR + 1 < nrow:
-        n = A[currR+1][currC]
-        # check if it can keep going back to south
-        if currR + 2 < nrow:
-            nn = n + A[currR+2][currC]
-        else:
-            nn = n
-        # check if it can go back to east next
-        if currC + 1 < ncol:
-            nw = n + A[currR+1][currC+1]
-        else:
-            nw = n
-        
-    # check if it can go back to east
-    w = 0
-    if currC + 1 < ncol:
-        w = A[currR][currC+1]
-        # check if keep going east
-        if currC + 2 < ncol:
-            ww = w + A[currR][currC+2]
-        else:
-            ww = w
-        # check if go back to south
-        if currR + 1 < nrow:
-            wn = w + A[currR+1][currC+1]
-        else:
-            wn = w
-                    
-    my_arr = [nn, nw, ww, wn]
-    mostIndex = my_arr.index(max(my_arr))
-    if currR == nrow - 2 and currC == ncol - 1:
-        coin += n
-        path += "N"
-        nextR = currR + 1
-        nextC = currC
-    elif currR == nrow - 1 and currC == ncol - 2:
-        coin += w
+    if x == nrow - 1 and y == ncol - 1:
+        return path[::-1], A[x][y]
+    elif x == nrow - 1:
         path += "W"
-        nextR = currR
-        nextC = currC + 1
+        next_path, next_val = findPathWCache(A, x, y + 1, path)
+        return next_path, A[x][y] + next_val
+    elif y == ncol - 1:
+        path += "N"
+        next_path, next_val = findPathWCache(A, x + 1, y, path)
+        return next_path, A[x][y] + next_val
+    
+    # if go south(N)
+    pN, cN = findPathWCache(A, x + 1, y, path)
+    # if go east(W)
+    pW, cW = findPathWCache(A, x, y + 1, path)
+    
+    if cN > cW: 
+        pN += "N"
+        return pN, A[x][y] + cN
     else:
-        if mostIndex < 2:
-            coin += n
-            path += "N"
-            nextR = currR + 1
-            nextC = currC
-        else:
-            coin += w
-            path += "W"
-            nextR = currR
-            nextC = currC + 1
-    return path, coin, nextR, nextC
-
-A = [[0, 4, 1, 3, 11],
-     [8, 2, 4, 5, 6],
-     [1, 7, 3, 9, 0],
-     [0, 12, 1, 2, 0]]
+        pW += "W"
+        return pW, A[x][y] + cW
 
 
-timeB = time.perf_counter_ns()
-path, coin = findPath(A)
-timeA = time.perf_counter_ns() - timeB
-print(path)
-print(coin)
-print(timeA)
+def findPathNCache(A, x, y, path):
+    nrow = len(A)
+    ncol = len(A[0])
+    
+    if x == nrow - 1 and y == ncol - 1:
+        return path[::-1], A[x][y]
+    elif x == nrow - 1:
+        path += "W"
+        next_path, next_val = findPathNCache(A, x, y + 1, path)
+        return next_path, A[x][y] + next_val
+    elif y == ncol - 1:
+        path += "N"
+        next_path, next_val = findPathNCache(A, x + 1, y, path)
+        return next_path, A[x][y] + next_val
+    
+    # if go south(N)
+    pN, cN = findPathNCache(A, x + 1, y, path)
+    # if go east(W)
+    pW, cW = findPathNCache(A, x, y + 1, path)
+    
+    if cN > cW: 
+        pN += "N"
+        return pN, A[x][y] + cN
+    else:
+        pW += "W"
+        return pW, A[x][y] + cW
+# A = [[0, 4, 1, 3, 11],
+#      [8, 2, 4, 5, 6],
+#      [1, 7, 3, 9, 0],
+#      [0, 12, 1, 2, 0]]
+
+
+# timeB = time.perf_counter_ns()
+# p = ""
+# path, coin = findPath(A, 0, 0, p)
+# timeA = time.perf_counter_ns() - timeB
+# print(path)
+# print(coin)
+# print(timeA)
 
 
 # write a function to get an array of size N
@@ -130,77 +103,59 @@ def getMatrix(row, column):
         for j in range(int(column)):
             temp.append(random.randrange(0, 1000))
         ans.append(temp)
-    return ans
+    return tuple(map(tuple,ans))
 
-# get the runtime array
+# get the runtime array with cache
 def getTime(arrN):
-    timeR = []
     timeS = []
-    timeC = []
     for i in range(len(arrN)):
-        # Many rows by few columns
-        a_R = getMatrix(arrN[i]*4, arrN[i])
-        timeBeforeR = time.perf_counter_ns()
-        findPath(a_R)
-        timeR.append(time.perf_counter_ns() - timeBeforeR)
-        
         # Square
         a_S = getMatrix(arrN[i], arrN[i])
         timeBeforeS = time.perf_counter_ns()
-        findPath(a_S)
+        findPathWCache(a_S, 0, 0, "")
         timeS.append(time.perf_counter_ns() - timeBeforeS)
-        
-        # Many rows by few columns
-        a_C = getMatrix(arrN[i]/4, arrN[i])
-        timeBeforeC = time.perf_counter_ns()
-        findPath(a_C)
-        timeC.append(time.perf_counter_ns() - timeBeforeC)
-        
-    return [timeR, timeS, timeC]
+    return timeS 
+
+# get the runtime array without cache
+def getTimeNoC(arrN):
+    timeS = []
+    for i in range(len(arrN)):
+        # Square
+        a_S = getMatrix(arrN[i], arrN[i])
+        timeBeforeS = time.perf_counter_ns()
+        findPathWCache(a_S, 0, 0, "")
+        timeS.append(time.perf_counter_ns() - timeBeforeS)
+    return timeS
 
 def getExpResult():
-    arrN = getN(4, 512)
-    time1 = getTime(arrN)
-    time2 = getTime(arrN)
-    time3 = getTime(arrN)
-    time = []
-    rowname = []
-# calculate the average runtime
-    for i in range(3):
-        tmp = []
-        for j in range(len(arrN)):
-            tmp.append((time1[i][j] + time2[i][j] + time3[i][j]) / 3)
-        time.append(tmp)
-        
-    # print the runtime
-    for i in range(len(arrN)):
-        rowname.append(str(arrN[i]))
-        print(arrN[i], ",",
-              time[0][i], ",",
-              time[1][i], ",",
-              time[2][i], "\n")
+    arrN = getN(1, 256)
+    
+    noN = [1, 2, 4]
+    nocache = getTimeNoC(noN)
+    for i in range(len(arrN) - 3):
+        nocache.append(0)
+    print(nocache)
+    
+    
+    time = getTime(arrN)
     
     # save plot
     plt.figure(figsize=(8, 6))
 
-    plt.plot(arrN, time[0], label='Many Rows by Few Columns', color='blue')
-    plt.plot(arrN, time[1], label='Sqaure', color='green')
-    plt.plot(arrN, time[2], label='Few Rows by Many Columns', color='red')
+    plt.plot(arrN, time, label='Runtime (with @cache)', color='green')
+    plt.plot(arrN, nocache, label='Runtime (without @cache)', color='red', linestyle="dashed")
     plt.xlabel('N')
     plt.ylabel('Runtime (nanoseconds)')
     plt.title('Vault.py Runtime')
     plt.legend()
 
-    plt.savefig('q2.png')
+    plt.savefig('q1.png')
 
     fig, ax =plt.subplots(1, 1)
 
     table = pd.DataFrame()
-    table['Many Rows by Few Columns (s)'] = time[0]
-    table['Sqaure (s)'] = time[1]
-    table['Few Rows by Many Columns (s)'] = time[2]
-    table.index = rowname # type: ignore
-        
+    table['With Cache (nanoseconds)'] = time
+    table['Without Cache (nanoseconds)'] = nocache
     ax.axis('tight')
     ax.axis('off')
 
@@ -217,8 +172,9 @@ def getExpResult():
 def main():
     # filename = sys.argv[1]
     # matrix = readVault(filename)
+    # p = ""
     # timeB = time.perf_counter_ns()
-    # path, coin= findPath(matrix)
+    # path, coin= findPath(matrix, 0, 0, p)
     # timeA = time.perf_counter_ns() - timeB
     # print(path)
     # print(coin)
