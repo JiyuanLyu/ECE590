@@ -1,66 +1,33 @@
+from functools import cache
 import sys
-import time
 
-def read_vault(file_name):
-    with open(file_name, 'r') as file:
-        lines = file.readlines()
-        vault = [[int(coin) for coin in line.strip().split(',')] for line in lines]
-    return vault
+sys.setrecursionlimit(20000)
 
-def find_optimal_path(vault):
-    rows = len(vault)
-    cols = len(vault[0])
+@cache
+def recursion(record, x, y):
+    c = len(record[0]) - 1
+    r = len(record) - 1
 
-    dp = [[0] * cols for _ in range(rows)]
+    if(x == r and y == c):
+        return record[x][y]
+    if(x == r): 
+        return record[x][y] + recursion(record, x, y + 1)
+    if(y == c): 
+        return record[x][y] + recursion(record,x+1,y)
+    return record[x][y]+max(recursion(record,x+1,y),recursion(record, x, y + 1))
 
-    # Fill the first row and column of the dp table
-    dp[0][0] = vault[0][0]
-    for i in range(1, rows):
-        dp[i][0] = dp[i - 1][0] + vault[i][0]
-    for j in range(1, cols):
-        dp[0][j] = dp[0][j - 1] + vault[0][j]
 
-    # Fill the rest of the dp table
-    for i in range(1, rows):
-        for j in range(1, cols):
-            dp[i][j] = max(dp[i - 1][j], dp[i][j - 1]) + vault[i][j]
 
-    # Reconstruct the path
-    path = []
-    i, j = rows - 1, cols - 1
-    while i > 0 or j > 0:
-        if i == 0:
-            path.append('W')
-            j -= 1
-        elif j == 0:
-            path.append('N')
-            i -= 1
-        elif dp[i - 1][j] > dp[i][j - 1]:
-            path.append('N')
-            i -= 1
-        else:
-            path.append('W')
-            j -= 1
+def main():
+    input_path = sys.argv[1]
 
-    path.reverse()
-    return path
+    file = open(input_path, 'r').readlines()
+    inputs = [list(map(int, line.strip().split(','))) for line in file]
+    inputs = tuple(tuple(row) for row in inputs)
+    #inputs = tuple(inputs) 
+  
+    coins= recursion(inputs, 0, 0)
+    print(coins)
 
 if __name__ == "__main__":
-    if len(sys.argv) != 2:
-        print("Usage: python vault.py <input_file>")
-        sys.exit(1)
-
-    input_file = sys.argv[1]
-
-    start_time = time.perf_counter_ns()
-
-    vault = read_vault(input_file)
-    path = find_optimal_path(vault)
-
-    end_time = time.perf_counter_ns()
-
-    total_coins = sum(vault[i][j] for i, j in zip(range(len(vault)), [0] + [path.index('N') + 1 for _ in range(len(path))]))
-
-    print(''.join(path))
-    print(total_coins)
-    print(end_time - start_time)
+    main()        
