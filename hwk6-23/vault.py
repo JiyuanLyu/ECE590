@@ -1,5 +1,4 @@
 import sys
-from tempfile import tempdir
 import time
 import random
 import matplotlib.pyplot as plt
@@ -170,16 +169,16 @@ def getExpResult():
     return 0
 
 def main():
-    # filename = sys.argv[1]
-    # matrix = readVault(filename)
-    # p = ""
-    # timeB = time.perf_counter_ns()
-    # path, coin= findPath(matrix, 0, 0, p)
-    # timeA = time.perf_counter_ns() - timeB
-    # print(path)
-    # print(coin)
-    # print(timeA)
-    getExpResult()
+    filename = sys.argv[1]
+    matrix = readVault(filename)
+    p = ""
+    timeB = time.perf_counter_ns()
+    path, coin= findPathWCache(matrix, 0, 0, p)
+    timeA = time.perf_counter_ns() - timeB
+    print(path)
+    print(coin)
+    print(timeA)
+    #getExpResult()
     
 
 if __name__ == "__main__":
