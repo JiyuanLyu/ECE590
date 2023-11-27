@@ -163,15 +163,15 @@ def getExpResult():
     return 0
 
 def main():
-    # filename = sys.argv[1]
-    # tree = readTree(filename)
-    # timeB = time.perf_counter_ns()
-    # branch = findTree(tree, 0, len(tree) - 1)
-    # timeA = time.perf_counter_ns() - timeB
-    # print(branch)
-    # print(branch.computeCost())
-    # print(timeA)
-    getExpResult()
+    filename = sys.argv[1]
+    tree = readTree(filename)
+    timeB = time.perf_counter_ns()
+    branch = findTree(tree, 0, len(tree) - 1)
+    timeA = time.perf_counter_ns() - timeB
+    print(branch)
+    print(branch.computeCost())
+    print(timeA)
+    # getExpResult()
     
 
 if __name__ == "__main__":
