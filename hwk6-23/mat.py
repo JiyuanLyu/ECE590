@@ -69,8 +69,8 @@ def getMatrices(n):
     matrices = []
     for i in range(n):
         name = chr(ord('A') + i)  # Generate matrix names A, B, C, ...
-        rows = random.randint(1, 100)  # Random number of rows (1 to 10)
-        cols = random.randint(1, 100)  # Random number of columns (1 to 10)
+        rows = random.randint(1, 100)  # Random number of rows (1 to 100)
+        cols = random.randint(1, 100)  # Random number of columns (1 to 100)
         matrices.append((name, rows, cols))
     return tuple(matrices)
 
@@ -136,15 +136,15 @@ def getExpResult():
     return 0
 
 def main():
-    # filename = sys.argv[1]
-    # matrices = readMatrix(filename)
-    # timeB = time.perf_counter_ns()
-    # minOpe, order = findOpe(matrices, 0, len(matrices) - 1)
-    # timeA = time.perf_counter_ns() - timeB
-    # print(order)
-    # print(minOpe)
-    # print(timeA)
-    getExpResult()
+    filename = sys.argv[1]
+    matrices = readMatrix(filename)
+    timeB = time.perf_counter_ns()
+    minOpe, order = findOpe(matrices, 0, len(matrices) - 1)
+    timeA = time.perf_counter_ns() - timeB
+    print(order)
+    print(minOpe)
+    print(timeA)
+    # getExpResult()
     
 
 if __name__ == "__main__":

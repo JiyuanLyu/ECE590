@@ -133,8 +133,6 @@ def getExpResult():
     nocache = getTimeNoC(noN)
     for i in range(len(arrN) - 3):
         nocache.append(0)
-    print(nocache)
-    
     
     time = getTime(arrN)
     
