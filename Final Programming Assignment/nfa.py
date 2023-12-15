@@ -43,7 +43,7 @@ class NFA:
                         states.append(s)
         return states
     # It takes a string and returns True if the string is in the language of this NFA
-    def isStringInLanguage(self, string):
+    def problematic(self, string):
         queue = [(self.states[0], 0)]
         currS = self.states[0]
         pos = 0
