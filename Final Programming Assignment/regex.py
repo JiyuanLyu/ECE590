@@ -64,8 +64,13 @@ class EpsilonRegex(Regex):
         return '&'
     def __repr__(self):
         return '&'
+    # 1b implementation
     def transformToNFA(self):
-        pass
+        nfa = NFA()
+        epsilon = State(0)
+        nfa.states.append(epsilon)
+        nfa.is_accepting[0] = True
+        return nfa
     pass
 
 class ReInput:

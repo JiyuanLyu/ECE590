@@ -1,3 +1,4 @@
+from cgi import test
 import copy
 from regex import *
 from state import * 
@@ -65,6 +66,7 @@ if __name__ == "__main__":
         pass
 
     #test your NFA:
+    testNFA('&', '', True)
     # testNFA('a', '', False)
     # testNFA('a', 'a', True)
     # testNFA('a', 'ab', False)
