@@ -36,10 +36,11 @@ class DFA:
         curr = 0
         for c in string:
             if c not in self.states[curr].transition:
-                return False;
+                return False
             else:
                 curr = self.states[curr].transition[c][0].id
         return self.is_accepting[curr]
+        
     # You should write this function.
     # It runs BFS on this DFA and returns the shortest string accepted by it
     def shortestString(self):

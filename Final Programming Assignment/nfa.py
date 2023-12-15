@@ -57,6 +57,16 @@ class NFA:
                         states.append(s)
         return set(states)
     
+    def epsilonClosureDFA(self, ns):
+        states = []
+        for n in ns:
+            states.append(n)
+            for sym, nn in self.states[n.id].transition.items():  
+                if sym == '&':
+                    for s in nn:
+                        states.append(s)
+        return set(states)
+    
     # It takes a string and returns True if the string is in the language of this NFA
     def isStringInLanguage(self, string):
         # I implement this method based on the given method problematic()
