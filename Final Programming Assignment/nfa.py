@@ -43,6 +43,7 @@ class NFA:
         s1.union(set(nfa.alphabet))
         self.alphabet = list(s1)
         pass
+    
     # You should write this function.
     # It takes a state and returns the epsilon closure of that state 
     # which is a set of states which are reachable from this state 

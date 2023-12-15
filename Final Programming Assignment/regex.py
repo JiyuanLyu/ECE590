@@ -6,7 +6,7 @@ class Regex:
     def __repr__(self):
         ans=str(type(self))+"("
         sep=""
-        for i in self.children: # type: ignore
+        for i in self.children: 
             ans = ans + sep + repr(i)
             sep=", "
             pass
