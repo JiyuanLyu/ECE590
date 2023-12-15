@@ -269,8 +269,8 @@ if __name__ == "__main__":
     testEquivalence('(a|b)*', '(a|((a|b)|b))*', True)
     testEquivalence('&', '&&', True)
     testEquivalence('&', '&&a', False)
-    testEquivalence('((ab|cd)*|(de*fg|h(ij)*klm*n|q))*', 'hijijklmmmmmmmmmmn',False)
-    testEquivalence('((ab|cd)*|(de*fg|h(ij)*klm*n|q))*', '((ab|cd)*|(de*fg|h(ij)*klm*m*n|q))*',True)
+    testEquivalence('((ab|cd)*|(de*fg|h(ij)*klm*n|q))*', 'hijijklmmmmmmmmmmn', False)
+    testEquivalence('((ab|cd)*|(de*fg|h(ij)*klm*n|q))*', '((ab|cd)*|(de*fg|h(ij)*klm*m*n|q))*', True)
 
     pass
     
