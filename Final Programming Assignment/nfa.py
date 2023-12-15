@@ -42,7 +42,48 @@ class NFA:
                     for s in nn:
                         states.append(s)
         return states
+    
     # It takes a string and returns True if the string is in the language of this NFA
+    def isStringInLanguage(self, string):
+        # I implement this method based on the given method problematic()
+        # In the problematic(), the current state is pop from the last element of queue
+        # it follows the Last In First Out and it's a stack not a queue
+        # So problematic() used DFS to figure out if the string is in the Language
+        # Here I would like to use BFS instead and always pop the first element of queue
+        
+        queue = [(self.states[0], 0)]
+        currS = self.states[0]
+        pos = 0
+        visited = []
+        while queue:
+            # Here I would like to use First In First Out to visit the states
+            # which is based on BFS
+            currS, pos = queue.pop(0)
+            if pos == len(string):
+                if currS.id in self.is_accepting and self.is_accepting[currS.id]:
+                    return self.is_accepting[currS.id]
+                for n in self.epsilonClose([currS]):
+                    queue.append((n, pos))
+                continue
+            for s in self.states:
+                if s.id == currS.id:
+                    if string[pos] in s.transition:
+                        stats = s.transition[string[pos]]
+                        for stat in stats:
+                            queue.extend([(stat,pos+1)])
+                            queue.extend([(s,pos+1) for s in self.epsilonClose([stat])])
+                    else:
+                        for n in self.epsilonClose([currS]):
+                            queue.append((n, pos))
+                    break
+        if pos == len(string):
+            return currS.id in self.is_accepting and self.is_accepting[currS.id]
+        else:
+            return False
+    pass
+        
+        
+    # The problematic function that need to be fixed
     def problematic(self, string):
         queue = [(self.states[0], 0)]
         currS = self.states[0]
