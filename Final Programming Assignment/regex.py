@@ -1,3 +1,4 @@
+from re import T
 from nfa import *
 from state import *
 
@@ -53,8 +54,19 @@ class SymRegex(Regex):
         return self.sym
     def __repr__(self):
         return self.sym
+    # 1c implementation
     def transformToNFA(self):
-        pass
+        nfa = NFA()
+        start_state = State(0)
+        accept_state = State(1)
+        nfa.states.extend([start_state, accept_state])
+        start_state.transition[self.sym] = [accept_state]
+
+        nfa.is_accepting[0] = False
+        nfa.is_accepting[1] = True
+        if self.sym not in nfa.alphabet:
+            nfa.alphabet.append(self.sym)
+        return nfa
     pass
 
 class EpsilonRegex(Regex):
