@@ -29,31 +29,20 @@ class NFA:
         else:
             s1.transition[sym] = {s2}
         return
-        # if sym in s1.transition:
-        #     s1.transition[sym].append(s2)
-        # else:
-        #     s1.transition[sym]=[s2]
-        # return
+    
     # You should write this function.
     # It takes an nfa, adds all the states from that nfa and return a 
     # mapping of (state number in old NFA to state number in this NFA) as a dictionary.
     def addStatesFrom(self, nfa):
-        # state_id_mapping = {}
-        # for state in nfa.states:
-        #     new_state_id = len(self.states)
-        #     new_state = State(new_state_id)
-        #     new_state.transition = copy.deepcopy(state.transition)
-            
-        #     self.states.append(new_state)
-        #     state_id_mapping[state.id] = new_state_id
-        len1=len(self.states)
+        curr_len = len(self.states)
         for i in range(len(nfa.states)):
-            nfa.states[i].id+=len1
+            nfa.states[i].id += curr_len
             self.states.append(nfa.states[i])
-            self.is_accepting[i+len1]=nfa.is_accepting[i]
-        s1=set(self.alphabet)
+            self.is_accepting[i + curr_len] = nfa.is_accepting[i]
+        s1 = set(self.alphabet)
         s1.union(set(nfa.alphabet))
-        self.alphabet=list(s1)
+        self.alphabet = list(s1)
+        pass
     # You should write this function.
     # It takes a state and returns the epsilon closure of that state 
     # which is a set of states which are reachable from this state 
