@@ -8,11 +8,22 @@ from dfa import *
 # You should write this function.
 # It takes an NFA and returns a DFA.
 def nfaToDFA(nfa):
+    dfa = DFA()
+    dfa.alphabet = nfa.alphabet
+    for i in range(len(nfa.states)):
+        
     pass
+
+
 # You should write this function.
 # It takes an DFA and returns a NFA.
 def dfaToNFA(dfa):
-    pass
+    nfa = NFA()
+    nfa.states = copy.deepcopy(dfa.states)
+    nfa.is_accepting= copy.deepcopy(dfa.is_accepting)
+    nfa.alphabet =copy.deepcopy(dfa.alphabet)
+    return nfa
+
 # You should write this function.
 # It takes two regular expressions and returns a 
 # boolean indicating if they are equivalent
