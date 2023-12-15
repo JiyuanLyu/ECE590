@@ -29,6 +29,11 @@ class NFA:
         else:
             s1.transition[sym] = {s2}
         return
+        # if sym in s1.transition:
+        #     s1.transition[sym].append(s2)
+        # else:
+        #     s1.transition[sym]=[s2]
+        # return
     # You should write this function.
     # It takes an nfa, adds all the states from that nfa and return a 
     # mapping of (state number in old NFA to state number in this NFA) as a dictionary.
@@ -82,8 +87,8 @@ class NFA:
                     if string[pos] in s.transition:
                         stats = s.transition[string[pos]]
                         for stat in stats:
-                            queue.extend([(stat,pos+1)])
-                            queue.extend([(s,pos+1) for s in self.epsilonClose([stat])])
+                            queue.extend([(stat,pos+1)]) # type: ignore
+                            queue.extend([(s,pos+1) for s in self.epsilonClose([stat])]) # type: ignore
                     else:
                         for n in self.epsilonClose([currS]):
                             queue.append((n, pos))
@@ -96,32 +101,32 @@ class NFA:
         
         
     # The problematic function that need to be fixed
-    def problematic(self, string):
-        queue = [(self.states[0], 0)]
-        currS = self.states[0]
-        pos = 0
-        visited = []
-        while queue:
-            currS, pos = queue.pop()
-            if pos == len(string):
-                if currS.id in self.is_accepting and self.is_accepting[currS.id]:
-                    return self.is_accepting[currS.id]
-                for n in self.epsilonClose([currS]):
-                    queue.append((n, pos))
-                continue
-            for s in self.states:
-                if s.id == currS.id:
-                    if string[pos] in s.transition:
-                        stats = s.transition[string[pos]]
-                        for stat in stats:
-                            queue.extend([(stat,pos+1)])
-                            queue.extend([(s,pos+1) for s in self.epsilonClose([stat])])
-                    else:
-                        for n in self.epsilonClose([currS]):
-                            queue.append((n, pos))
-                    break
-        if pos == len(string):
-            return currS.id in self.is_accepting and self.is_accepting[currS.id]
-        else:
-            return False
-    pass
+    # def problematic(self, string):
+    #     queue = [(self.states[0], 0)]
+    #     currS = self.states[0]
+    #     pos = 0
+    #     visited = []
+    #     while queue:
+    #         currS, pos = queue.pop()
+    #         if pos == len(string):
+    #             if currS.id in self.is_accepting and self.is_accepting[currS.id]:
+    #                 return self.is_accepting[currS.id]
+    #             for n in self.epsilonClose([currS]):
+    #                 queue.append((n, pos))
+    #             continue
+    #         for s in self.states:
+    #             if s.id == currS.id:
+    #                 if string[pos] in s.transition:
+    #                     stats = s.transition[string[pos]]
+    #                     for stat in stats:
+    #                         queue.extend([(stat,pos+1)])
+    #                         queue.extend([(s,pos+1) for s in self.epsilonClose([stat])])
+    #                 else:
+    #                     for n in self.epsilonClose([currS]):
+    #                         queue.append((n, pos))
+    #                 break
+    #     if pos == len(string):
+    #         return currS.id in self.is_accepting and self.is_accepting[currS.id]
+    #     else:
+    #         return False
+    # pass

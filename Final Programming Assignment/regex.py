@@ -6,7 +6,7 @@ class Regex:
     def __repr__(self):
         ans=str(type(self))+"("
         sep=""
-        for i in self.children:
+        for i in self.children: # type: ignore
             ans = ans + sep + repr(i)
             sep=", "
             pass
@@ -46,23 +46,12 @@ class StarRegex(Regex):
     def __str__(self):
         return "({})*".format(self.children[0])
     def transformToNFA(self):
-        child_nfa = self.children[0].transformToNFA()
-
-        star_nfa = NFA()
-        start_state = State(0)
-        star_nfa.states.append(start_state)
-        star_nfa.startS = 0
-        star_nfa.is_accepting[start_state.id] = True 
-
-        state_mapping = star_nfa.addStatesFrom(child_nfa)
-        star_nfa.addTransition(start_state.id, state_mapping[child_nfa.startS], '&')
-
-        for state_id, is_accepting in child_nfa.is_accepting.items():
-            if is_accepting == True:
-                star_nfa.addTransition(state_mapping[state_id], state_mapping[child_nfa.startS], '&')
-                star_nfa.is_accepting[state_mapping[state_id]] = True
-
-        star_nfa.alphabet = child_nfa.alphabet
+        star_nfa = self.children[0].transformToNFA()
+        star_length = len(star_nfa.states)
+        for i in range(1, star_length):
+            if star_nfa.is_accepting[i]:
+                star_nfa.addTransition(star_nfa.states[i], star_nfa.states[0])
+        star_nfa.is_accepting[0]=True
         return star_nfa
     pass
 
@@ -73,33 +62,36 @@ class OrRegex(Regex):
     def __str__(self):
         return "(({})|({}))".format(self.children[0],self.children[1])
     def transformToNFA(self):
+        # first = self.children[0].transformToNFA()
+        # second = self.children[1].transformToNFA()
+        # new_start_state = State(0)
+        # first.startS = new_start_state.id
+        # first.states.insert(0, new_start_state)
+        # second.startS = new_start_state.id
+        # second.states.insert(0, new_start_state)
+        # offset = len(first.states)
+        # for state in second.states:
+        #     state.id += offset
+        # first.states.extend(second.states)
+
+        # # Merge the alphabets
+        # first.alphabet = set(first.alphabet).union(second.alphabet)
+        # first.addTransition(new_start_state, first.states[1])
+        # first.addTransition(new_start_state, first.states[offset + 1])
+        # for state_id in range(offset, offset + len(second.states)):
+        #     if state_id - offset in second.is_accepting and second.is_accepting[state_id - offset]:
+        #         first.is_accepting[state_id] = True
+        
         first = self.children[0].transformToNFA()
         second = self.children[1].transformToNFA()
-
-        or_nfa = NFA()
-
-        new_start_state = State(0)
-        or_nfa.states.append(new_start_state)
-        or_nfa.startS = 0
-
-        state_mapping1 = or_nfa.addStatesFrom(first)
-        state_mapping2 = or_nfa.addStatesFrom(second)
-        or_nfa.addTransition(new_start_state.id, state_mapping1[first.startS], '&')
-        or_nfa.addTransition(new_start_state.id, state_mapping2[second.startS], '&')
-
-        for state_id, is_accepting in first.is_accepting.items():
-            if is_accepting:
-                or_nfa.is_accepting[state_mapping1[state_id]] = True
+        first_length = len(first.states)
         
-        for state_id, is_accepting in second.is_accepting.items():
-            if is_accepting:
-                or_nfa.is_accepting[state_mapping2[state_id]] = True
-
-        or_nfa.alphabet = set(first.alphabet)
-        for symbol in second.alphabet:
-            or_nfa.alphabet.add(symbol)
-
-        return or_nfa
+        first.addStatesFrom(second)
+        first.addTransition(first.states[0], first.states[first_length])
+        for i in second.alphabet:
+            if i not in first.alphabet:
+                first.alphabet.append(i)
+        return first
     pass
 
 class SymRegex(Regex):
@@ -193,9 +185,9 @@ def parse_re(s):
             return ans
         if c == '&':
             return EpsilonRegex()
-        if c in ')|*':
+        if c in ')|*': # type: ignore
             inp.unget()
-            inp.fail("Expected open paren, symbol, or epsilon")
+            inp.fail("Expected open paren, symbol, or epsilon") # type: ignore
             pass
         return SymRegex(c)
     def rtail(lhs):
@@ -205,7 +197,7 @@ def parse_re(s):
             return rtail(OrRegex(lhs,x))
         return lhs
     def ctail(lhs):
-        if(inp.peek() is not None and inp.peek() not in '|*)'):
+        if(inp.peek() is not None and inp.peek() not in '|*)'): # type: ignore
             temp=parseS()
             return ctail(ConcatRegex(lhs,temp))
         return lhs
