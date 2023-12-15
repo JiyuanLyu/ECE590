@@ -55,7 +55,7 @@ class NFA:
                 if sym == '&':
                     for s in nn:
                         states.append(s)
-        return states
+        return set(states)
     
     # It takes a string and returns True if the string is in the language of this NFA
     def isStringInLanguage(self, string):

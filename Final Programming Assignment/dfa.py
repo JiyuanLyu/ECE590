@@ -30,9 +30,15 @@ class DFA:
     # You should write this function.
     # It takes a string and returns True if the string is in the language of this DFA
     def isStringInLanguage(self, string):
-        pass
+        curr = 0
+        for c in string:
+            if c not in self.states[curr].transition:
+                return False;
+            else:
+                curr = self.states[curr].transition[c][0].id
+        return self.is_accepting[curr]
     # You should write this function.
     # It runs BFS on this DFA and returns the shortest string accepted by it
-    def shortestString():
+    def shortestString(self):
         pass
     pass
