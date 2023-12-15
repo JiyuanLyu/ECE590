@@ -23,7 +23,20 @@ class ConcatRegex(Regex):
     def __str__(self):
         return "{}{}".format(self.children[0],self.children[1])
     def transformToNFA(self):
-        pass
+        first = self.children[0].transformToNFA()
+        second = self.children[1].transformToNFA()
+        state_mapping = first.addStatesFrom(second)
+        
+        for state_id in first.is_accepting:
+            if first.is_accepting[state_id]:
+                first.addTransition(state_id, state_mapping[second.startS], '&')
+                first.is_accepting[state_id] = False
+
+        for state_id, is_accepting in second.is_accepting.items():
+            first.is_accepting[state_mapping[state_id]] = is_accepting
+
+        first.alphabet.update(second.alphabet)
+        return first
     pass
 
 class StarRegex(Regex):
@@ -33,7 +46,24 @@ class StarRegex(Regex):
     def __str__(self):
         return "({})*".format(self.children[0])
     def transformToNFA(self):
-        pass
+        child_nfa = self.children[0].transformToNFA()
+
+        star_nfa = NFA()
+        start_state = State(0)
+        star_nfa.states.append(start_state)
+        star_nfa.startS = 0
+        star_nfa.is_accepting[start_state.id] = True 
+
+        state_mapping = star_nfa.addStatesFrom(child_nfa)
+        star_nfa.addTransition(start_state.id, state_mapping[child_nfa.startS], '&')
+
+        for state_id, is_accepting in child_nfa.is_accepting.items():
+            if is_accepting == True:
+                star_nfa.addTransition(state_mapping[state_id], state_mapping[child_nfa.startS], '&')
+                star_nfa.is_accepting[state_mapping[state_id]] = True
+
+        star_nfa.alphabet = child_nfa.alphabet
+        return star_nfa
     pass
 
 class OrRegex(Regex):
@@ -43,7 +73,33 @@ class OrRegex(Regex):
     def __str__(self):
         return "(({})|({}))".format(self.children[0],self.children[1])
     def transformToNFA(self):
-        pass
+        first = self.children[0].transformToNFA()
+        second = self.children[1].transformToNFA()
+
+        or_nfa = NFA()
+
+        new_start_state = State(0)
+        or_nfa.states.append(new_start_state)
+        or_nfa.startS = 0
+
+        state_mapping1 = or_nfa.addStatesFrom(first)
+        state_mapping2 = or_nfa.addStatesFrom(second)
+        or_nfa.addTransition(new_start_state.id, state_mapping1[first.startS], '&')
+        or_nfa.addTransition(new_start_state.id, state_mapping2[second.startS], '&')
+
+        for state_id, is_accepting in first.is_accepting.items():
+            if is_accepting:
+                or_nfa.is_accepting[state_mapping1[state_id]] = True
+        
+        for state_id, is_accepting in second.is_accepting.items():
+            if is_accepting:
+                or_nfa.is_accepting[state_mapping2[state_id]] = True
+
+        or_nfa.alphabet = set(first.alphabet)
+        for symbol in second.alphabet:
+            or_nfa.alphabet.add(symbol)
+
+        return or_nfa
     pass
 
 class SymRegex(Regex):

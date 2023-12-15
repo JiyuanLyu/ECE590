@@ -24,12 +24,24 @@ class NFA:
     # It takes two states and a symbol. It adds a transition from 
     # the first state of the NFA to the other input state of the NFA.
     def addTransition(self, s1, s2, sym = '&'):
-        pass
+        if sym in s1.transition:
+            s1.transition[sym].add(s2)
+        else:
+            s1.transition[sym] = {s2}
+        return
     # You should write this function.
     # It takes an nfa, adds all the states from that nfa and return a 
     # mapping of (state number in old NFA to state number in this NFA) as a dictionary.
     def addStatesFrom(self, nfa):
-        pass
+        state_id_mapping = {}
+        for state in nfa.states:
+            new_state_id = len(self.states)
+            new_state = State(new_state_id)
+            new_state.transition = copy.deepcopy(state.transition)
+            
+            self.states.append(new_state)
+            state_id_mapping[state.id] = new_state_id
+        return state_id_mapping
     # You should write this function.
     # It takes a state and returns the epsilon closure of that state 
     # which is a set of states which are reachable from this state 
