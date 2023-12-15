@@ -25,17 +25,16 @@ class ConcatRegex(Regex):
     def transformToNFA(self):
         first = self.children[0].transformToNFA()
         second = self.children[1].transformToNFA()
-        state_mapping = first.addStatesFrom(second)
-        
-        for state_id in first.is_accepting:
-            if first.is_accepting[state_id]:
-                first.addTransition(state_id, state_mapping[second.startS], '&')
-                first.is_accepting[state_id] = False
-
-        for state_id, is_accepting in second.is_accepting.items():
-            first.is_accepting[state_mapping[state_id]] = is_accepting
-
-        first.alphabet.update(second.alphabet)
+        len1 = len(first.states)
+        first.addStatesFrom(second)
+        for i in range(len1):
+            if first.is_accepting[i]:
+                first.addTransition(first.states[i],first.states[len1])
+        for i in range(len1):
+            first.is_accepting[i] = False
+        for i in second.alphabet:
+            if i not in first.alphabet:
+                first.alphabet.append(i)    
         return first
     pass
 

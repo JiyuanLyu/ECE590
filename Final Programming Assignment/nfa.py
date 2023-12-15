@@ -38,15 +38,22 @@ class NFA:
     # It takes an nfa, adds all the states from that nfa and return a 
     # mapping of (state number in old NFA to state number in this NFA) as a dictionary.
     def addStatesFrom(self, nfa):
-        state_id_mapping = {}
-        for state in nfa.states:
-            new_state_id = len(self.states)
-            new_state = State(new_state_id)
-            new_state.transition = copy.deepcopy(state.transition)
+        # state_id_mapping = {}
+        # for state in nfa.states:
+        #     new_state_id = len(self.states)
+        #     new_state = State(new_state_id)
+        #     new_state.transition = copy.deepcopy(state.transition)
             
-            self.states.append(new_state)
-            state_id_mapping[state.id] = new_state_id
-        return state_id_mapping
+        #     self.states.append(new_state)
+        #     state_id_mapping[state.id] = new_state_id
+        len1=len(self.states)
+        for i in range(len(nfa.states)):
+            nfa.states[i].id+=len1
+            self.states.append(nfa.states[i])
+            self.is_accepting[i+len1]=nfa.is_accepting[i]
+        s1=set(self.alphabet)
+        s1.union(set(nfa.alphabet))
+        self.alphabet=list(s1)
     # You should write this function.
     # It takes a state and returns the epsilon closure of that state 
     # which is a set of states which are reachable from this state 
