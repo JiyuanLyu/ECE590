@@ -10,32 +10,31 @@ from queue import deque # type: ignore
 # You should write this function.
 # It takes an NFA and returns a DFA.
 def nfaToDFA(nfa):
-    d = {}
+    dfa = DFA()
+    dfa.alphabet = nfa.alphabet
+    stateLen = 0
+    dfa.states.append(State(stateLen))
+    
+    tempSet = {}
     for i in range(len(nfa.states)):
         setState = set([nfa.states[i]])
         while(setState != nfa.epsilonClosureDFA(setState)):
             setState = nfa.epsilonClosureDFA(setState)
-        allep = []
-        allep.append(i)
+        myset = []
+        myset.append(i)
         for j in setState:
-            allep.append(j.id)
-        d[i] = set(allep)
+            myset.append(j.id)
+        tempSet[i] = set(myset)
+    nfa_info = [tempSet[0]]
     
-    #dfa
-    dfa = DFA()
-    dfa.alphabet = nfa.alphabet
-    state_len = 0
-    dfa.states.append(State(state_len))
-    nfa_info = [d[0]]
-    
-    for state in d[0]:
+    for state in tempSet[0]:
         if nfa.is_accepting[state] == True:
-            dfa.is_accepting[state_len] = True
+            dfa.is_accepting[stateLen] = True
             break
         else: 
-            dfa.is_accepting[state_len] = False
+            dfa.is_accepting[stateLen] = False
 
-    state_len += 1
+    stateLen += 1
     
     curr = 0
 
@@ -53,7 +52,7 @@ def nfaToDFA(nfa):
             ans=[]
             for i in s:
                 ans.append(i)
-                for j in d[i]:
+                for j in tempSet[i]:
                     ans.append(j)
             s = set(ans)
             
@@ -63,22 +62,22 @@ def nfaToDFA(nfa):
                     break
                 n += 1
             
-            if n<state_len:
+            if n<stateLen:
                 dfa.addTransition(dfa.states[curr], dfa.states[n], c)
             else:
-                dfa.states.append(State(state_len))
+                dfa.states.append(State(stateLen))
                 nfa_info.append(s)
                 
                 for it in s:
                     if nfa.is_accepting[it]==True:
-                        dfa.is_accepting[state_len] = True
+                        dfa.is_accepting[stateLen] = True
                         break
-                    dfa.is_accepting[state_len] = False
+                    dfa.is_accepting[stateLen] = False
                 
-                state_len += 1
+                stateLen += 1
                 dfa.addTransition(dfa.states[curr], dfa.states[n], c)
         curr += 1
-        if curr >= state_len:
+        if curr >= stateLen:
             break
         
     return dfa
@@ -185,8 +184,8 @@ if __name__ == "__main__":
         print(str(re))
         pass
 
-    # #test your NFA:
-    # # epsilon
+    #test your NFA:
+    # epsilon
     # testNFA('&', '', True)
     # # sym
     # testNFA('a', '', False)
@@ -278,14 +277,14 @@ if __name__ == "__main__":
     # testDFA('((ab|cd)*|(de*fg|h(ij)*klm*n|q))*', 'hijijklmmmmmmmmmmn', True)
     # testDFA('((a|b)*|b)*', 'ababb', True)
     
-    # testEquivalence('((a|b)*|b)*','(b)((a|b)*|b)*',False)
-    # testEquivalence('a*','aa*',False)
-    # testEquivalence('a|b', 'a|((a|b)|b)', True)
-    # testEquivalence('(a|b)*', '(a|((a|b)|b))*', True)
-    # testEquivalence('&', '&&', True)
-    # testEquivalence('&', '&&a', False)
-    # testEquivalence('((ab|cd)*|(de*fg|h(ij)*klm*n|q))*', 'hijijklmmmmmmmmmmn', False)
-    # testEquivalence('((ab|cd)*|(de*fg|h(ij)*klm*n|q))*', '((ab|cd)*|(de*fg|h(ij)*klm*m*n|q))*', True)
-    # testEquivalence("a|b", "b|a", True)
+    testEquivalence('((a|b)*|b)*','(b)((a|b)*|b)*',False)
+    testEquivalence('a*','aa*',False)
+    testEquivalence('a|b', 'a|((a|b)|b)', True)
+    testEquivalence('(a|b)*', '(a|((a|b)|b))*', True)
+    testEquivalence('&', '&&', True)
+    testEquivalence('&', '&&a', False)
+    testEquivalence('((ab|cd)*|(de*fg|h(ij)*klm*n|q))*', 'hijijklmmmmmmmmmmn', False)
+    testEquivalence('((ab|cd)*|(de*fg|h(ij)*klm*n|q))*', '((ab|cd)*|(de*fg|h(ij)*klm*m*n|q))*', True)
+    testEquivalence("a|b", "b|a", True)
     pass
     
