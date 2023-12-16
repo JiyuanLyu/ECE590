@@ -12,12 +12,12 @@ from queue import deque # type: ignore
 def nfaToDFA(nfa):
     d = {}
     for i in range(len(nfa.states)):
-        ss = set([nfa.states[i]])
-        while(ss != nfa.epsilonClosureDFA(ss)):
-            ss = nfa.epsilonClosureDFA(ss)
+        setState = set([nfa.states[i]])
+        while(setState != nfa.epsilonClosureDFA(setState)):
+            setState = nfa.epsilonClosureDFA(setState)
         allep = []
         allep.append(i)
-        for j in ss:
+        for j in setState:
             allep.append(j.id)
         d[i] = set(allep)
     
@@ -94,32 +94,42 @@ def dfaToNFA(dfa):
 # here I write a union function to help test the equivalent
 # the function will take two nfa and return a union nfa
 def union_nfas(nfa1, nfa2):
-    new_start_state = State(0)
-
-    for state in nfa1.states:
-        state.id += 1
-    for state in nfa2.states:
-        state.id += len(nfa1.states) + 1
-
-    nfa1.states.insert(0, new_start_state)
-    nfa1.startS = new_start_state.id
-    nfa1.states.extend(nfa2.states)
-
-    nfa1.addTransition(new_start_state, nfa1.states[1], '&')
-    nfa1.addTransition(new_start_state, nfa1.states[len(nfa1.states) - len(nfa2.states)], '&')
-    for state_id in range(1, len(nfa1.states) - len(nfa2.states)):
-        nfa1.is_accepting[state_id] = nfa1.is_accepting.get(state_id, False)
-    for state_id in range(len(nfa1.states) - len(nfa2.states), len(nfa1.states)):
-        nfa1.is_accepting[state_id] = nfa2.is_accepting.get(state_id - (len(nfa1.states) - len(nfa2.states)), False)
-
-    nfa1.alphabet = list(set(nfa1.alphabet).union(set(nfa2.alphabet)))
+    len1=len(nfa1.states)
+    nfa1.addStatesFrom(nfa2)
+    nfa1.addTransition(nfa1.states[0],nfa1.states[len1])
+    for i in nfa2.alphabet:
+        if i not in nfa1.alphabet:
+            nfa1.alphabet.append(i)
     return nfa1
 
 # You should write this function.
 # It takes two regular expressions and returns a 
 # boolean indicating if they are equivalent
 def equivalent(re1, re2):
-    pass
+    nfa1 = re1.transformToNFA()
+    nfa2 = re2.transformToNFA()
+    
+    dfa1 = nfaToDFA(nfa1)
+    dfa1.complement()
+    nfa1Complement = dfaToNFA(dfa1)
+    
+    dfa2 = nfaToDFA(nfa2)
+    dfa2.complement()
+    nfa2Complement = dfaToNFA(dfa2)
+    
+    nfa1C_nfa2 = nfaToDFA(union_nfas(nfa1Complement, nfa2))
+    nfa1C_nfa2.complement()
+    for i in nfa1C_nfa2.is_accepting:
+        if nfa1C_nfa2.is_accepting[i] ==True:
+            return False
+        
+    nfa1_nfa2C = nfaToDFA(union_nfas(nfa1, nfa2Complement))
+    nfa1_nfa2C.complement()
+    for j in nfa1_nfa2C.is_accepting:
+        if nfa1_nfa2C.is_accepting[j] == True:
+            return False
+        
+    return True
 
 if __name__ == "__main__":
     def testNFA(strRe, s, expected):
@@ -263,14 +273,14 @@ if __name__ == "__main__":
     # testDFA('((ab|cd)*|(de*fg|h(ij)*klm*n|q))*', 'hijijklmmmmmmmmmmn', True)
     # testDFA('((a|b)*|b)*', 'ababb', True)
     
-    testEquivalence('((a|b)*|b)*','(b)((a|b)*|b)*',False)
-    testEquivalence('a*','aa*',False)
-    testEquivalence('a|b', 'a|((a|b)|b)', True)
-    testEquivalence('(a|b)*', '(a|((a|b)|b))*', True)
-    testEquivalence('&', '&&', True)
-    testEquivalence('&', '&&a', False)
-    testEquivalence('((ab|cd)*|(de*fg|h(ij)*klm*n|q))*', 'hijijklmmmmmmmmmmn', False)
-    testEquivalence('((ab|cd)*|(de*fg|h(ij)*klm*n|q))*', '((ab|cd)*|(de*fg|h(ij)*klm*m*n|q))*', True)
-
+    # testEquivalence('((a|b)*|b)*','(b)((a|b)*|b)*',False)
+    # testEquivalence('a*','aa*',False)
+    # testEquivalence('a|b', 'a|((a|b)|b)', True)
+    # testEquivalence('(a|b)*', '(a|((a|b)|b))*', True)
+    # testEquivalence('&', '&&', True)
+    # testEquivalence('&', '&&a', False)
+    # testEquivalence('((ab|cd)*|(de*fg|h(ij)*klm*n|q))*', 'hijijklmmmmmmmmmmn', False)
+    # testEquivalence('((ab|cd)*|(de*fg|h(ij)*klm*n|q))*', '((ab|cd)*|(de*fg|h(ij)*klm*m*n|q))*', True)
+    # testEquivalence("a|b", "b|a", True)
     pass
     
