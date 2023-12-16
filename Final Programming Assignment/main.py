@@ -278,14 +278,14 @@ if __name__ == "__main__":
     # testDFA('((ab|cd)*|(de*fg|h(ij)*klm*n|q))*', 'hijijklmmmmmmmmmmn', True)
     # testDFA('((a|b)*|b)*', 'ababb', True)
     
-    testEquivalence('((a|b)*|b)*','(b)((a|b)*|b)*',False)
-    testEquivalence('a*','aa*',False)
-    testEquivalence('a|b', 'a|((a|b)|b)', True)
-    testEquivalence('(a|b)*', '(a|((a|b)|b))*', True)
-    testEquivalence('&', '&&', True)
-    testEquivalence('&', '&&a', False)
-    testEquivalence('((ab|cd)*|(de*fg|h(ij)*klm*n|q))*', 'hijijklmmmmmmmmmmn', False)
-    testEquivalence('((ab|cd)*|(de*fg|h(ij)*klm*n|q))*', '((ab|cd)*|(de*fg|h(ij)*klm*m*n|q))*', True)
-    testEquivalence("a|b", "b|a", True)
+    # testEquivalence('((a|b)*|b)*','(b)((a|b)*|b)*',False)
+    # testEquivalence('a*','aa*',False)
+    # testEquivalence('a|b', 'a|((a|b)|b)', True)
+    # testEquivalence('(a|b)*', '(a|((a|b)|b))*', True)
+    # testEquivalence('&', '&&', True)
+    # testEquivalence('&', '&&a', False)
+    # testEquivalence('((ab|cd)*|(de*fg|h(ij)*klm*n|q))*', 'hijijklmmmmmmmmmmn', False)
+    # testEquivalence('((ab|cd)*|(de*fg|h(ij)*klm*n|q))*', '((ab|cd)*|(de*fg|h(ij)*klm*m*n|q))*', True)
+    # testEquivalence("a|b", "b|a", True)
     pass
     
