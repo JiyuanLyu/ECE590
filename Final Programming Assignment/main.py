@@ -89,18 +89,21 @@ def dfaToNFA(dfa):
     nfa = NFA()
     nfa.states = copy.deepcopy(dfa.states)
     nfa.is_accepting= copy.deepcopy(dfa.is_accepting)
-    nfa.alphabet =copy.deepcopy(dfa.alphabet)
+    nfa.alphabet = copy.deepcopy(dfa.alphabet)
     return nfa
+
 # here I write a union function to help test the equivalent
 # the function will take two nfa and return a union nfa
 def union_nfas(nfa1, nfa2):
-    len1=len(nfa1.states)
-    nfa1.addStatesFrom(nfa2)
-    nfa1.addTransition(nfa1.states[0],nfa1.states[len1])
+    union_nfa = NFA()
+    union_nfa = copy.deepcopy(nfa1)
+    len1 = len(union_nfa.states)
+    union_nfa.addStatesFrom(nfa2)
+    union_nfa.addTransition(union_nfa.states[0],union_nfa.states[len1])
     for i in nfa2.alphabet:
-        if i not in nfa1.alphabet:
-            nfa1.alphabet.append(i)
-    return nfa1
+        if i not in union_nfa.alphabet:
+            union_nfa.alphabet.append(i)
+    return union_nfa
 
 # You should write this function.
 # It takes two regular expressions and returns a 
@@ -273,14 +276,14 @@ if __name__ == "__main__":
     # testDFA('((ab|cd)*|(de*fg|h(ij)*klm*n|q))*', 'hijijklmmmmmmmmmmn', True)
     # testDFA('((a|b)*|b)*', 'ababb', True)
     
-    # testEquivalence('((a|b)*|b)*','(b)((a|b)*|b)*',False)
-    # testEquivalence('a*','aa*',False)
-    # testEquivalence('a|b', 'a|((a|b)|b)', True)
-    # testEquivalence('(a|b)*', '(a|((a|b)|b))*', True)
-    # testEquivalence('&', '&&', True)
-    # testEquivalence('&', '&&a', False)
-    # testEquivalence('((ab|cd)*|(de*fg|h(ij)*klm*n|q))*', 'hijijklmmmmmmmmmmn', False)
-    # testEquivalence('((ab|cd)*|(de*fg|h(ij)*klm*n|q))*', '((ab|cd)*|(de*fg|h(ij)*klm*m*n|q))*', True)
-    # testEquivalence("a|b", "b|a", True)
+    testEquivalence('((a|b)*|b)*','(b)((a|b)*|b)*',False)
+    testEquivalence('a*','aa*',False)
+    testEquivalence('a|b', 'a|((a|b)|b)', True)
+    testEquivalence('(a|b)*', '(a|((a|b)|b))*', True)
+    testEquivalence('&', '&&', True)
+    testEquivalence('&', '&&a', False)
+    testEquivalence('((ab|cd)*|(de*fg|h(ij)*klm*n|q))*', 'hijijklmmmmmmmmmmn', False)
+    testEquivalence('((ab|cd)*|(de*fg|h(ij)*klm*n|q))*', '((ab|cd)*|(de*fg|h(ij)*klm*m*n|q))*', True)
+    testEquivalence("a|b", "b|a", True)
     pass
     
