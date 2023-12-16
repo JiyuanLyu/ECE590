@@ -97,9 +97,11 @@ def dfaToNFA(dfa):
 def union_nfas(nfa1, nfa2):
     union_nfa = NFA()
     union_nfa = copy.deepcopy(nfa1)
-    len1 = len(union_nfa.states)
+    unionLength = len(union_nfa.states)
+    
     union_nfa.addStatesFrom(nfa2)
-    union_nfa.addTransition(union_nfa.states[0],union_nfa.states[len1])
+    union_nfa.addTransition(union_nfa.states[0],union_nfa.states[unionLength])
+    
     for i in nfa2.alphabet:
         if i not in union_nfa.alphabet:
             union_nfa.alphabet.append(i)
